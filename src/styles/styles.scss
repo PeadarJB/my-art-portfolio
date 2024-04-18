@@ -1,0 +1,83 @@
+// Variables
+$font-color-light: #FAFAFA;
+$font-color-dark: #171717;
+$hover-link-light: #838383;
+$hover-link-dark: #838383;
+
+$font-family-body: 'Jost', sans-serif; 
+$font-size-base: 16px;
+$line-height-base: 1.5;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;600&display=swap');
+
+// Assuming a mobile-first approach
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+// Body and base styles
+body {
+  font-family: $font-family-body;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  font-weight: $font-weight-normal;
+  color: $font-color-dark;
+  background-color: $font-color-light;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease-out, color 0.3s ease-out;
+}
+
+// Navigation
+.navbar {
+  position: fixed;
+  // Styles for your hamburger menu
+}
+
+.theme-toggle {
+  position: fixed;
+  // Styles for your theme toggle button
+}
+
+// Anchor tags and interactive states
+a {
+  color: inherit; // Links use the body text color by default
+  text-decoration: none;
+  &:hover {
+    color: $hover-link-light;
+  }
+}
+
+// Dark theme class applied to body
+.dark-theme {
+  background-color: $font-color-dark;
+  color: $font-color-light;
+  a {
+    &:hover {
+      color: $hover-link-dark;
+    }
+  }
+}
+
+// Responsive styles
+@media (min-width: $breakpoint-tablet) {
+  // Tablet styles
+}
+
+@media (min-width: $breakpoint-desktop) {
+  // Desktop styles
+}
+
+// Fade animations for page transitions
+.fade-enter,
+.fade-exit {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+.fade-enter-active,
+.fade-exit-active {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
