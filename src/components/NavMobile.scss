@@ -1,0 +1,45 @@
+.nav-mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 10; // Ensure it's above other content
+    // Style the hamburger icon as needed
+  }
+  
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(23, 23, 23, 0.95); // Using your dark theme bg color
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3.5rem; // Adjust based on your header's height
+  
+    .nav-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      text-align: center;
+  
+      li {
+        margin: 0.5rem 0;
+  
+        a {
+          display: block;
+          color: #FAFAFA; // Text color for the dark theme
+          text-decoration: none;
+          padding: 1rem;
+          font-size: 1.5rem; // Adjust size as needed
+  
+          &:hover {
+            background-color: #838383; // Hover state bg color
+          }
+        }
+      }
+    }
+  }
