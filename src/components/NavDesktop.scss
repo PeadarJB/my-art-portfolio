@@ -1,0 +1,15 @@
+@import '../styles/variables.scss';
+
+// The desktop navigation styles
+.nav-desktop {
+  display: none; // By default, it's hidden like the 'hidden' class
+
+  @media (min-width: $breakpoint-desktop) {
+    display: flex; // Equivalent to 'lg:flex'
+    align-items: center; // Equivalent to 'lg:items-center'
+    gap: 1.25rem; // Equivalent to 'gap-5'
+  }
+
+  // Font size similar to 'text-sm'
+  font-size: 0.875rem;
+}

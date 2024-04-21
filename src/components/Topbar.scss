@@ -1,0 +1,23 @@
+@import '../styles/variables.scss';
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $font-color-light; // Assuming bg-neutral-950 is a dark grey
+    
+  
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+  
+      @media (min-width: $breakpoint-desktop) { // lg breakpoint
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+    }
+  }

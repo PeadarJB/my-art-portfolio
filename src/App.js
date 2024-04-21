@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { NavMobile } from './components/NavMobile';
-
+import { Topbar } from './components/Topbar';
 import Home from './pages/Home';
 import About from './pages/About';
 import CV from './pages/CV';
@@ -11,7 +10,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <NavMobile />
+        <Topbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

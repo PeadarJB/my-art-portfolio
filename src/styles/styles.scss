@@ -1,21 +1,4 @@
-// Variables
-$font-color-light: #FAFAFA;
-$font-color-dark: #171717;
-$hover-link-light: #838383;
-$hover-link-dark: #838383;
-
-$font-family-body: 'Jost', sans-serif; 
-$font-size-base: 16px;
-$line-height-base: 1.5;
-$font-weight-normal: 400;
-$font-weight-bold: 700;
-
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;600&display=swap');
-
-// Assuming a mobile-first approach
-$breakpoint-mobile: 480px;
-$breakpoint-tablet: 768px;
-$breakpoint-desktop: 1024px;
+@import './variables.scss';
 
 // Body and base styles
 body {
@@ -25,7 +8,8 @@ body {
   font-weight: $font-weight-normal;
   color: $font-color-dark;
   background-color: $font-color-light;
-  margin: 0;
+  margin-top: 12%;
+  margin-left: 5%;
   padding: 0;
   transition: background-color 0.3s ease-out, color 0.3s ease-out;
 }
@@ -63,11 +47,17 @@ a {
 
 // Responsive styles
 @media (min-width: $breakpoint-tablet) {
-  // Tablet styles
+ body{ 
+  margin-top: 15%;
+  margin-left: 5%;
+ }
 }
 
 @media (min-width: $breakpoint-desktop) {
-  // Desktop styles
+  body{
+  margin-top: 5%;
+  margin-left: 5%;
+  }
 }
 
 // Fade animations for page transitions
