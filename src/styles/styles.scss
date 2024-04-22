@@ -8,8 +8,9 @@ body {
   font-weight: $font-weight-normal;
   color: $font-color-dark;
   background-color: $font-color-light;
-  margin-top: 12%;
+  margin-top: 15%;
   margin-left: 5%;
+  margin-right: 5%;
   padding: 0;
   transition: background-color 0.3s ease-out, color 0.3s ease-out;
 }
@@ -27,7 +28,7 @@ body {
 
 // Anchor tags and interactive states
 a {
-  color: inherit; // Links use the body text color by default
+  color: rgb(105, 105, 173); // Links use the body text color by default
   text-decoration: none;
   &:hover {
     color: $hover-link-light;

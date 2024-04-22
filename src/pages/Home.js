@@ -1,13 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
     <div>
       <ul>
-        <li>2022</li>
-        <li>2021</li>
-        <li>2020</li>
-        <li>2019</li>
+        <li><Link>2022</Link></li>
+        <li><Link>2021</Link></li>
+        <li><Link>2020</Link></li>
+        <li><Link>2019</Link></li>
       </ul>
     </div>
   );

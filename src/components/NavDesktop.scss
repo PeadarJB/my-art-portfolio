@@ -6,10 +6,12 @@
 
   @media (min-width: $breakpoint-desktop) {
     display: flex; // Equivalent to 'lg:flex'
-    align-items: center; // Equivalent to 'lg:items-center'
+    align-items: center;
+    justify-content: center;
     gap: 1.25rem; // Equivalent to 'gap-5'
+    width: 100%;
   }
 
   // Font size similar to 'text-sm'
-  font-size: 0.875rem;
+  font-size: $font-size-base;
 }
