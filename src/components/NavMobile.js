@@ -18,10 +18,10 @@ export const NavMobile = () => {
       <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          exit={{ x: -100 }}
+          transition={{ duration: 0.2, type: 'tween' }}
           className="menu-overlay">
           <ul>
             {routes.map((route, index) => (
