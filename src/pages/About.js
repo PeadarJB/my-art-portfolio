@@ -15,7 +15,7 @@ const About = () => {
       <p>
       Driven by a deep interest in culture and identity, the artist completed a Masters in World Heritage Management and Conservation 
       at UCD between 2017 and 2018. His professional trajectory continued as a heritage consultant for the National Monuments Service,
-       during which he authored the UNESCO World Heritage Tentative List Application for the Burren in 2021.
+       during which he co-authored the UNESCO World Heritage Tentative List Application for the Burren in 2021.
       </p>
       <p>
       In 2022, he received the Agility Award, the Fingal County Council Artist Support Scheme, and the Leitrim County Council 
@@ -24,8 +24,8 @@ const About = () => {
       Co. Mayo, in 2023.
       </p>
       <p>
-      The artist's practice skillfully merges painting and drawing with sculptural elements. The recent series, "Upland Folk," 
-      incorporated handmade sculptural frames, bringing narrative depth to themes of identity, social constructs, religion, history, 
+      The artist's practice merges painting and drawing with sculptural elements. The recent series, "Upland Folk," 
+      incorporates handmade sculptural frames, bringing narrative depth to themes of identity, social constructs, religion, history, 
       magic, and mythology. Drawing from diverse life experiences in Ireland, South Africa, Zimbabwe, and Mexico, his art probes 
       deep into narratives of existence, continuity, and transformation amidst societal shifts. The artist seeks to articulate and draw 
       purpose from the intricate interplay between form, intent, and cultural narrative.

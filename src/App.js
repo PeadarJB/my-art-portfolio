@@ -6,10 +6,12 @@ import About from './pages/About';
 import CV from './pages/CV';
 import Contact from './pages/Contact';
 import Year2022 from './pages/Year2022';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   return (
     <Router>
+      <ScrollToTop/>
       <div className="App">
         <Topbar />
         <Routes>

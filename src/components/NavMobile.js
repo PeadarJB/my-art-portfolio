@@ -13,7 +13,11 @@ export const NavMobile = () => {
   useClickAway(ref, () => setOpen(false));
 
   return (
-    <div ref={ref} className="nav-mobile">
+    <motion.div ref={ref} className="nav-mobile"
+    initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        exit={{opacity: 0}}
+        transition={{ duration: 1 }}>
       <Hamburger toggled={isOpen} toggle={setOpen} size={20} />
       <AnimatePresence>
       {isOpen && (
@@ -44,6 +48,6 @@ export const NavMobile = () => {
         </motion.div>
       )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };

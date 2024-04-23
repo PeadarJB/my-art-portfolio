@@ -5,13 +5,14 @@
     top: 0;
     left: 0;
     right: 0;
-    background-color: rgba(250,250,250,0.8);
+    // background-color: rgba(250,250,250,0.8);
     
   
     .container {
       display: flex;
       align-items: center;
       justify-content: space-between;
+    
       
   
       @media (min-width: $breakpoint-desktop) { // lg breakpoint
