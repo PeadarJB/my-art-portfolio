@@ -3,7 +3,8 @@ import { useClickAway } from 'react-use';
 import { Squash as Hamburger } from 'hamburger-react';
 import { Link } from 'react-router-dom';
 import { routes } from '../routes';
-import './NavMobile.scss'; // Ensure the styles are imported
+import ThemeToggle from './ThemeToggle';
+import './NavMobile.scss'; 
 import { AnimatePresence, motion } from 'framer-motion';
 
 export const NavMobile = () => {
@@ -45,6 +46,7 @@ export const NavMobile = () => {
               </motion.li>
             ))}
           </ul>
+          <li><ThemeToggle/></li>
         </motion.div>
       )}
       </AnimatePresence>

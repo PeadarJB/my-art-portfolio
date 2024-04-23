@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Topbar } from './components/Topbar';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import About from './pages/About';
 import CV from './pages/CV';
 import Contact from './pages/Contact';
 import Year2022 from './pages/Year2022';
-import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.body.className = theme; // Apply theme class to body
+  }, [theme]);
+
   return (
     <Router>
-      <ScrollToTop/>
+      <ScrollToTop />
       <div className="App">
         <Topbar />
         <Routes>
