@@ -4,7 +4,7 @@ import paintingsData from "../data/paintingsData";
 
 const Year2022 = () => {
     return(
-        <div>
+        <div className="horizontal-gallery">
             <picture>
                 <img></img>
             </picture>
