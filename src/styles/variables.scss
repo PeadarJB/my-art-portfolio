@@ -1,20 +1,24 @@
-// Variables
-$font-color-light: #FAFAFA;
-$font-color-dark: #171717;
-$hover-link-light: #838383;
-$hover-link-dark: #838383;
-
-$menu-overlay-light: rgba(255, 255, 255, 0.5);
-
-$font-family-body: 'Jost', sans-serif; 
-$font-size-base: 16px;
-$line-height-base: 1.5;
-$font-weight-normal: 400;
-$font-weight-bold: 700;
-
+// Import the font first
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;600&display=swap');
 
-// Assuming a mobile-first approach
+// Define CSS custom properties in the :root for global access
+:root {
+  --font-color-light: #FAFAFA;
+  --font-color-dark: #171717;
+  --hover-link-light: #838383;
+  --hover-link-dark: #838383;
+
+  --menu-overlay-light: rgba(255, 255, 255, 0.5);
+  --menu-overlay-dark: rgba(34, 34, 34, 0.8);
+
+  --font-family-body: 'Jost', sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+}
+
+// SCSS variables for local use
 $breakpoint-mobile: 480px;
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 1024px;

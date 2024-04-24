@@ -2,73 +2,51 @@
 
 // Body and base styles
 body {
-  font-family: $font-family-body;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
-  font-weight: $font-weight-normal;
-  color: $font-color-dark;
-  background-color: $font-color-light;
-  margin-top: 15%;
-  margin-left: 5%;
-  margin-right: 5%;
-  padding: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  font-weight: var(--font-weight-normal);
   transition: background-color 0.3s ease-out, color 0.3s ease-out;
-}
+  padding-top: 10%;
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-top: 10%;
 
-// Navigation
-.navbar {
-  position: fixed;
-  // Styles for your hamburger menu
-}
+  &.light {
+    color: var(--font-color-dark);
+    background-color: var(--font-color-light);
+  }
 
-.theme-toggle {
-  position: fixed;
-  // Styles for your theme toggle button
+  &.dark {
+    color: var(--font-color-light);
+    background-color: var(--font-color-dark);
+  }
 }
 
 // Anchor tags and interactive states
 a {
-  color: rgb(105, 105, 173); // Links use the body text color by default
+  color: rgb(0, 176, 203); // Use CSS variable
   text-decoration: none;
+
   &:hover {
-    color: $hover-link-light;
+    color: rgb(178, 175, 130); // Use CSS variable
   }
 }
 
-// Dark theme class applied to body
-.dark-theme {
-  background-color: $font-color-dark;
-  color: $font-color-light;
-  a {
-    &:hover {
-      color: $hover-link-dark;
-    }
-  }
-}
+// Here, add the rest of your specific component styles as needed
 
-// Responsive styles
+// Include media queries for responsive design
 @media (min-width: $breakpoint-tablet) {
- body{ 
-  margin-top: 15%;
-  margin-left: 5%;
- }
+  body {
+    margin-left: 5%;
+  }
 }
 
 @media (min-width: $breakpoint-desktop) {
-  body{
-  margin-top: 5%;
-  margin-left: 5%;
+  body {
+    margin-left: 5%;
+    margin-top: 0;
+    padding-top: 5%;
+    margin-right: 5%;
   }
-}
-
-// Fade animations for page transitions
-.fade-enter,
-.fade-exit {
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-}
-.fade-enter-active,
-.fade-exit-active {
-  opacity: 1;
-  transition: opacity 0.3s ease-out;
 }

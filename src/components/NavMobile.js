@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useClickAway } from 'react-use';
-import { Squash as Hamburger } from 'hamburger-react';
+import Hamburger from 'hamburger-react'
 import { Link } from 'react-router-dom';
 import { routes } from '../routes';
-import ThemeToggle from './ThemeToggle';
 import './NavMobile.scss'; 
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -46,7 +45,7 @@ export const NavMobile = () => {
               </motion.li>
             ))}
           </ul>
-          <li><ThemeToggle/></li>
+          
         </motion.div>
       )}
       </AnimatePresence>
