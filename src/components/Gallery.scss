@@ -1,28 +1,36 @@
 .gallery {
   display: flex;
-  overflow-x: scroll;
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding: 20px 0;
+  width: 100vw;
+ 
   
   ::-webkit-scrollbar {
-    display: none; // Optionally hide the scrollbar on WebKit browsers
+    display: none; 
   }
   
   .gallery-item {
-    flex: 0 0 auto; // Prevent flex items from growing or shrinking
+    flex: none;
     scroll-snap-align: start;
-    margin-right: 20px;
-    width: 100%; // You can set a fixed width if you prefer
+    width: 95%; // Each gallery item takes full viewport width
+    height: 100vh; // Each gallery item takes full viewport height
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-right: 100px;
+    padding: 2%;
     
     .gallery-image {
-      width: 100%;
-      height: auto;
-      display: block;
+      max-width: 100%; // Ensure it's responsive and doesn't overflow its container
+      max-height: 400px; // Set a maximum height
+      object-fit: contain; // Keep the aspect ratio of the image
     }
     
     .gallery-item-info {
-      // Styles for your text, add padding, margins, etc.
+      // Additional styles here
+      text-align: center; // Center the text
     }
   }
 }

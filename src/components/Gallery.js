@@ -1,6 +1,7 @@
 import React from 'react';
 import paintingsData from '../data/paintingsData'; // Import your data
 import '../components/Gallery.scss';
+import { motion } from 'framer-motion';
 
 const Gallery = ({ year }) => {
   const imagesForYear = paintingsData[year] || []; // Access data for the specific year

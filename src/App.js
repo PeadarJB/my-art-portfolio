@@ -8,6 +8,7 @@ import About from './pages/About';
 import CV from './pages/CV';
 import Contact from './pages/Contact';
 import Year2022 from './pages/Year2022';
+import Year2021 from './pages/Year2021';
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
@@ -26,7 +27,7 @@ const App = () => {
       <ScrollToTop />
       <div className="App">
         <Topbar />
-        <label htmlFor="theme-switch" style={{ position: 'fixed', top: '2.5%', right: '5%', zIndex: 100 }}>
+        <label htmlFor="theme-switch" style={{ position: 'fixed', top: '2.5%', right: '5%', marginRight: '5%', zIndex: 100 }}>
           <Switch
             onChange={toggleTheme}
             checked={theme === 'dark'}
@@ -48,6 +49,7 @@ const App = () => {
           <Route path="/cv" element={<CV />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/2022" element={<Year2022 />} />
+          <Route path="/2021" element={<Year2021 />} />
         </Routes>
       </div>
     </Router>
