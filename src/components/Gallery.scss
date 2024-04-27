@@ -20,11 +20,11 @@
     align-items: center;
     flex-direction: column;
     margin-right: 100px;
-    padding: 2%;
+    padding-left: 1%;
     
     .gallery-image {
       max-width: 100%; // Ensure it's responsive and doesn't overflow its container
-      max-height: 400px; // Set a maximum height
+      height: 400px; // Set a maximum height
       object-fit: contain; // Keep the aspect ratio of the image
     }
     

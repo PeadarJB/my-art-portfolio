@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './About.scss';
 
 const About = () => {
   return (
-    <div>
+    <div className='about'>
       <p>
       Born in Zimbabwe in 1991 to Irish parents who were both teachers and political activists during the apartheid struggles in 
       South Africa, the artist attended the Pro Arte Alphen Park Secondary School, South Africa, for two years, immersing in formal 
@@ -19,7 +20,7 @@ const About = () => {
       </p>
       <p>
       In 2022, he received the Agility Award, the Fingal County Council Artist Support Scheme, and the Leitrim County Council 
-      Individual Artist Bursary. These awards funded the project "<Link>Upland Folk</Link>", which was inspired by his heritage consultancy work. 
+      Individual Artist Bursary. These awards funded the project "<Link to='/2022'>Upland Folk</Link>", which was inspired by his heritage consultancy work. 
       This series was later exhibited as solo shows at Gimnasio de Arte y Cultura, Mexico City, in 2022, and at <a href="https://claremorrisgallery.ie/portfolio-item/peadar-jolliffe-byrne/" target="_blank" rel="noopener noreferrer">Claremorris Gallery</a>, 
       Co. Mayo, in 2023.
       </p>

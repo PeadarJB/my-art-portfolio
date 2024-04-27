@@ -1,8 +1,9 @@
 import React from "react";
+import './CV.scss';
 
 const CV = () => {
     return (
-        <div>
+        <div className="cv">
             <section>
                 <h2>Education</h2>
                 <p><strong>2017-2018:</strong> MSc World Heritage Management and Conservation, UCD, Dublin, IE.</p>
@@ -35,10 +36,10 @@ const CV = () => {
 
             <section>
                 <h2>Awards</h2>
-                <p><strong>2021 Arts Council Agility Award</strong></p>
-                <p><strong>2021 Fingal Artist Support Scheme Bursary Award</strong></p>
-                <p><strong>2021 Leitrim Individual Artist Bursary</strong></p>
-                <p><strong>2016 Shortlisted for Talbot Studios Most Promising Graduate Award</strong></p>
+                <p><strong>2021 </strong>Arts Council Agility Award</p>
+                <p><strong>2021 </strong>Fingal Artist Support Scheme Bursary Award</p>
+                <p><strong>2021 </strong>Leitrim Individual Artist Bursary</p>
+                <p><strong>2016 </strong>Shortlisted for Talbot Studios Most Promising Graduate Award</p>
             </section>
 
             <section>
@@ -48,7 +49,7 @@ const CV = () => {
 
             <section>
                 <h2>Collections</h2>
-                <p><strong>OPW Collection</strong></p>
+                <p>OPW Collection</p>
             </section>
 
             <section>

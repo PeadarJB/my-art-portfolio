@@ -1,0 +1,12 @@
+@import '../styles/variables.scss';
+
+.home {
+    margin-left: 5%;
+    margin-top: -5%;
+}
+
+@media (min-width: $breakpoint-desktop) {
+    .home {
+        margin-top: 5%;
+    }
+}
