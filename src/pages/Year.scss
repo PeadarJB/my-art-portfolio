@@ -1,30 +1,37 @@
 .year-container {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: scroll;
+    flex-direction: row;
+    overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
+    padding-top: 10%;
+    margin-top: 10%;
+   
   
     // Hide scrollbar across all browsers
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE 10+ */
     &::-webkit-scrollbar {
-      width: 0;
-      height: 0;
+      display: none;
     }
   
     > div {
       scroll-snap-align: start;
       flex: 0 0 100vw;
       width: 100vw;
-      
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
     }
+}
+
+.title-section img {
+  width: 90%;
+  margin-left: -5% !important;
 }
 
 .text-section {
