@@ -1,11 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App'; 
-import './styles/styles.scss'; // Import your SCSS file for global styles
+import { createRoot } from 'react-dom/client'; // Update the import to use createRoot
+import App from './App';
+import './styles/styles.scss'; // Continue to import your SCSS for global styles
 
-ReactDOM.render(
+// Access the container where the React application will mount
+const container = document.getElementById('root');
+
+// Create a root instance on the container
+const root = createRoot(container); 
+
+// Render your App component into the root
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );

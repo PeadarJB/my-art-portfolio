@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import Year2022 from './pages/Year2022';
 import Year2021 from './pages/Year2021';
 import Year2020 from './pages/Year2020';
+import Year2019 from './pages/Year2019';
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/2022" element={<Year2022 />} />
           <Route path="/2021" element={<Year2021 />} />
           <Route path="/2020" element={<Year2020 />} />
+          <Route path="/2019" element={<Year2019 />} />
         </Routes>
       </div>
     </Router>
