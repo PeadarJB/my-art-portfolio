@@ -1,4 +1,14 @@
+@import '../styles/variables.scss';
+
 .about {
     margin-left: 5%;
     margin-right: 5%;
+    margin-bottom: 5%;
+    padding-bottom: 5%;
+}
+
+@media (min-width: $breakpoint-tablet) {
+    .about{
+        margin-bottom: 10%;
+    }
 }

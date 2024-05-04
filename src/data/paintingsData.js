@@ -130,8 +130,8 @@ const paintingsData = {
         date: "2021",
         sizes: {
           small: "/images/2021/LluviaCollaboration-small.webp",
-          medium: "/images/2021/FinnandI-medium.webp",
-          large: "/images/2021/FinnandI-large.webp",
+          medium: "/images/2021/LluviaCollaboration-medium.webp",
+          large: "/images/2021/LluviaCollaboration-large.webp",
         },
       },
       {

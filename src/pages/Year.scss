@@ -1,62 +1,93 @@
 @import '../styles/variables.scss';
 
 .year-container {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    height: 100%;
-    width: 100vw;
-    padding-top: 10%;
-    margin-top: 10%;
+ 
+  display: flex; /* Ensures contents can be flexibly styled */
+  overflow-x: auto;
+  scrollbar-width: none;
+  align-items: center;
+  margin-left: 5%;
+  margin-top: 10%;
+  scroll-snap-type: x mandatory;
+  
    
   
     // Hide scrollbar across all browsers
-    scrollbar-width: none; /* Firefox */
+   
     -ms-overflow-style: none; /* IE 10+ */
     &::-webkit-scrollbar {
       display: none;
     }
+}
+.year-item{
+  flex: 0 0 auto;
+  width: 100vw; // each item takes full width of the viewport
+  margin-left: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   
-    > div {
-      scroll-snap-align: start;
-      flex: 0 0 100vw;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      box-sizing: border-box;
-    }
+}
+.year-item img{
+  width: 70%;
+  align-items: center;
+  text-align: center;
+}
+.year-item p{
+  width: 80%;
+}
+.year-item img.img-light {
+  display: flex; // Default hidden
 }
 
-.title-section img {
-  width: 90%;
-  margin-left: -5% !important;
+.year-item img.img-dark {
+  display: none; // Default visible
 }
 
-.text-section {
-    padding: 5%;
-    p {
-        margin: 0 auto;
-        padding: 5%;
-        word-wrap: break-word;
-        width: 75%;
-    }
+body.light {
+  .year-item img.img-light {
+    display: flex; // Show in light mode
+  }
+  .year-item img.img-dark {
+    display: none; // Hide in dark mode
+  }
 }
+
+body.dark {
+  .year-item img.img-light {
+    display: none; // Hide in dark mode
+  }
+  .year-item img.img-dark {
+    display: flex; // Show in dark mode
+  }
+}
+   
 
 @media (min-width: $breakpoint-desktop) {
   .year-container {
-    margin-top: 0;
-    padding-top: 5%;
-    display: flex;
-  flex-wrap: nowrap;
-  overflow-x: scroll;
+    display: flex; /* Ensures contents can be flexibly styled */
+  overflow-x: auto;
+  scrollbar-width: none;
+  align-items: center;
+  margin-left: 0;
+  margin-top: 2%;
+   
+  
+    // Hide scrollbar across all browsers
+   
+    -ms-overflow-style: none; /* IE 10+ */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .year-item{
+    margin-left: -5%;
+  }
+  .year-item p{
+    width: 60%;
+  }
+  .year-item img{
+    width: 700px;
+  }
     
-  }
-  .title-section img {
-    width: 80%;
-  }
 }
