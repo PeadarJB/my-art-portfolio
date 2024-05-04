@@ -1,3 +1,5 @@
+@import '../styles/variables.scss';
+
 .year-container {
     display: flex;
     flex-direction: row;
@@ -26,6 +28,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      box-sizing: border-box;
     }
 }
 
@@ -37,9 +40,23 @@
 .text-section {
     padding: 5%;
     p {
-        margin: 0;
+        margin: 0 auto;
         padding: 5%;
         word-wrap: break-word;
         width: 75%;
     }
+}
+
+@media (min-width: $breakpoint-desktop) {
+  .year-container {
+    margin-top: 0;
+    padding-top: 5%;
+    display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+    
+  }
+  .title-section img {
+    width: 80%;
+  }
 }

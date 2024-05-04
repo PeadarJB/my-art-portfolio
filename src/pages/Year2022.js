@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Gallery from "../components/Gallery";
 import paintingsData from "../data/paintingsData";
 import './Year.scss';
 
 
 const Year2022 = () => {
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+        const handleWheel = (event) => {
+            event.preventDefault();
+            if (scrollRef.current) {
+                scrollRef.current.scrollLeft += event.deltaY;
+            }
+        };
+
+        const scrollContainer = scrollRef.current;
+        scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+
+        return () => {
+            scrollContainer.removeEventListener('wheel', handleWheel);
+        };
+    }, []);
+
+
+
     return(
-        <div className="year-container">
+        <div className="year-container" ref={scrollRef}>
             <div className="title-section">
             <picture>
                 <img src=".\images\2022\UplandFolk-black-large.svg" alt="Upland Folk title text"/>

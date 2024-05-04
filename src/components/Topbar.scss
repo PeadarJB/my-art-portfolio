@@ -18,6 +18,9 @@
       @media (min-width: $breakpoint-desktop) { // lg breakpoint
         padding-top: 1rem;
         padding-bottom: 1rem;
+        background-color: var(--background-color);
+        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: blur(15px);
       }
     }
   }
