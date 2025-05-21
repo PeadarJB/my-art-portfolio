@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import Gallery from "../components/Gallery";
-import paintingsData from "../data/paintingsData";
 import './Year.scss';
 
 
@@ -29,12 +28,12 @@ const Year2022 = () => {
         <div className="year-container" ref={scrollRef}>
             <div className="year-item" >
             <picture>
-            <img src="./images/2022/UplandFolk-black-large.svg" alt="Upland Folk title text" className="img-light"/>
+            <img src="./images/2022/UplandFolk-black-large.svg" alt="Upland Folk title text" className="img-light" loading="lazy"/>
             
             </picture>
             <picture>
             
-            <img src="./images/2022/UplandFolk-white-large.svg" alt="Upland Folk title text" className="img-dark"/>
+            <img src="./images/2022/UplandFolk-white-large.svg" alt="Upland Folk title text" className="img-dark" loading="lazy"/>
             </picture>
             </div>
             <div className="year-item">
@@ -49,7 +48,7 @@ const Year2022 = () => {
                 inhospitable landscape are the people who live there.
                 </p>
             </div>            
-            <Gallery year="2022" paintingsData={paintingsData["2022"]} /> 
+            <Gallery year="2022" /> 
         </div>
     );
 };
