@@ -13,7 +13,7 @@ const Gallery = ({ year }) => {
           <picture>
             <source media="(min-width: 1024px)" srcSet={painting.sizes.large} />
             <source media="(min-width: 768px)" srcSet={painting.sizes.medium} />
-            <img src={painting.sizes.small} alt={painting.title} className="gallery-image" />
+          <img src={painting.sizes.small} alt={painting.title} className="gallery-image" loading="lazy" width="400" height="300" />
           </picture>
           <div className="gallery-item-info">
             <h3>{painting.title}</h3>
