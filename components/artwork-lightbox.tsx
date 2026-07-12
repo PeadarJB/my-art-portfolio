@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { EnquiryButton } from "@/components/enquiry-button";
 import { useLightboxStore } from "@/lib/store/lightbox-store";
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
 export function ArtworkLightbox() {
   const activeIndex = useLightboxStore((state) => state.activeIndex);
@@ -15,21 +18,12 @@ export function ArtworkLightbox() {
   const next = useLightboxStore((state) => state.next);
   const previous = useLightboxStore((state) => state.previous);
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
+
   const current = items[activeIndex];
 
-  const adjacentSources = useMemo(() => {
-    if (!current || items.length < 2) {
-      return [];
-    }
-
-    const prevIndex = (activeIndex - 1 + items.length) % items.length;
-    const nextIndex = (activeIndex + 1) % items.length;
-
-    return [items[prevIndex]?.image.large, items[nextIndex]?.image.large].filter(
-      (source): source is string => Boolean(source)
-    );
-  }, [activeIndex, current, items]);
-
+  // Keyboard: Escape closes, arrows navigate, Tab is trapped inside the dialog.
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -37,6 +31,7 @@ export function ArtworkLightbox() {
 
     const handleKeydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        event.preventDefault();
         close();
         return;
       }
@@ -46,6 +41,31 @@ export function ArtworkLightbox() {
       }
       if (event.key === "ArrowLeft") {
         previous();
+        return;
+      }
+      if (event.key === "Tab") {
+        const dialog = dialogRef.current;
+        if (!dialog) {
+          return;
+        }
+        const focusable = Array.from(
+          dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+        ).filter((element) => element.offsetParent !== null);
+        if (focusable.length === 0) {
+          event.preventDefault();
+          dialog.focus();
+          return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+        if (event.shiftKey && (active === first || active === dialog)) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && active === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
 
@@ -55,6 +75,7 @@ export function ArtworkLightbox() {
     };
   }, [close, isOpen, next, previous]);
 
+  // Lock body scroll and make the rest of the page inert while open.
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -62,21 +83,38 @@ export function ArtworkLightbox() {
 
     const priorOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    const backgrounded = Array.from(
+      document.querySelectorAll<HTMLElement>(".site-header, .site-shell")
+    );
+    for (const element of backgrounded) {
+      element.setAttribute("inert", "");
+    }
+
     return () => {
       document.body.style.overflow = priorOverflow;
+      for (const element of backgrounded) {
+        element.removeAttribute("inert");
+      }
     };
   }, [isOpen]);
 
+  // Move focus into the dialog on open; restore it to the trigger on close.
   useEffect(() => {
     if (!isOpen) {
       return;
     }
 
-    for (const source of adjacentSources) {
-      const image = new window.Image();
-      image.src = source;
-    }
-  }, [adjacentSources, isOpen]);
+    restoreFocusRef.current = document.activeElement as HTMLElement | null;
+    const frame = window.requestAnimationFrame(() => {
+      dialogRef.current?.focus();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      restoreFocusRef.current?.focus?.();
+    };
+  }, [isOpen]);
 
   if (!isOpen || !current) {
     return null;
@@ -85,16 +123,20 @@ export function ArtworkLightbox() {
   return (
     <div
       className="lightbox-backdrop"
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${current.title} full-screen artwork viewer`}
       onClick={(event) => {
         if (event.target === event.currentTarget) {
           close();
         }
       }}
     >
-      <div className="lightbox-shell">
+      <div
+        className="lightbox-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${current.title} full-screen artwork viewer`}
+        ref={dialogRef}
+        tabIndex={-1}
+      >
         <div className="lightbox-topbar">
           <p className="lightbox-counter">
             {activeIndex + 1} / {items.length}
@@ -126,7 +168,7 @@ export function ArtworkLightbox() {
               width={current.image.width}
               height={current.image.height}
               className="lightbox-image"
-              quality={97}
+              quality={90}
               priority
               sizes="(max-width: 900px) 96vw, 90vw"
             />
@@ -151,7 +193,11 @@ export function ArtworkLightbox() {
             </p>
           </div>
           <div className="lightbox-actions">
-            <Link className="btn btn-secondary" href={`/gallery/${current.year}/${current.id}`} onClick={close}>
+            <Link
+              className="btn btn-secondary"
+              href={`/gallery/${current.year}/${current.id}`}
+              onClick={close}
+            >
               View detail page
             </Link>
             <EnquiryButton title={current.title} />

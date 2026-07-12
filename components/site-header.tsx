@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useUIStore } from "@/lib/store/ui-store";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -17,14 +19,51 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const safePath = pathname ?? "/";
+  const navOpen = useUIStore((state) => state.navOpen);
+  const setNavOpen = useUIStore((state) => state.setNavOpen);
+
+  // Collapse the mobile menu whenever the route changes.
+  useEffect(() => {
+    setNavOpen(false);
+  }, [safePath, setNavOpen]);
+
+  // Allow Escape to close the open mobile menu.
+  useEffect(() => {
+    if (!navOpen) {
+      return;
+    }
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setNavOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeydown);
+    return () => document.removeEventListener("keydown", handleKeydown);
+  }, [navOpen, setNavOpen]);
 
   return (
     <header className="site-header">
-      <div className="brand-lockup">
-        <p className="brand-title">Peadar Jolliffe-Byrne</p>
-        <p className="brand-subtitle">Artist Portfolio</p>
-      </div>
-      <nav className="site-nav" aria-label="Primary">
+      <Link href="/" className="brand-lockup" aria-label="Peadar Jolliffe-Byrne, home">
+        <span className="brand-title">Peadar Jolliffe-Byrne</span>
+        <span className="brand-subtitle">Artist Portfolio</span>
+      </Link>
+
+      <button
+        type="button"
+        className="nav-toggle"
+        aria-expanded={navOpen}
+        aria-controls="primary-navigation"
+        aria-label={navOpen ? "Close menu" : "Open menu"}
+        onClick={() => setNavOpen(!navOpen)}
+      >
+        <span className="nav-toggle-bars" aria-hidden="true" />
+      </button>
+
+      <nav
+        id="primary-navigation"
+        className={clsx("site-nav", { "is-open": navOpen })}
+        aria-label="Primary"
+      >
         {navItems.map((item) => {
           const active =
             item.href === "/" ? safePath === item.href : safePath.startsWith(item.href);
@@ -35,6 +74,7 @@ export function SiteHeader() {
               href={item.href}
               className={clsx({ "is-active": active })}
               aria-current={active ? "page" : undefined}
+              onClick={() => setNavOpen(false)}
             >
               {item.label}
             </Link>

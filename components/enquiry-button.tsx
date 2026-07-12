@@ -2,7 +2,7 @@ type EnquiryButtonProps = {
   title?: string;
 };
 
-const DEFAULT_EMAIL = "studio@example.com";
+const DEFAULT_EMAIL = "peadarjb@gmail.com";
 
 export function EnquiryButton({ title }: EnquiryButtonProps) {
   const targetEmail = process.env.NEXT_PUBLIC_ENQUIRY_EMAIL ?? DEFAULT_EMAIL;
