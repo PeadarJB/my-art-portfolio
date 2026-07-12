@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Artist statement and background for Peadar Jolliffe-Byrne, whose painting and drawing practice draws on narrative, memory, and cultural heritage.",
+  alternates: { canonical: "/about" },
+};
+
 export default function AboutPage() {
   return (
     <section className="page prose-page">

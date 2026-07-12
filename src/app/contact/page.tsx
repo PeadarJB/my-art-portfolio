@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
+
 import { EnquiryButton } from "@/components/enquiry-button";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Enquire about collecting, exhibiting, or commissioning work by Peadar Jolliffe-Byrne.",
+  alternates: { canonical: "/contact" },
+};
 
 export default function ContactPage() {
   return (
@@ -14,10 +23,7 @@ export default function ContactPage() {
           title and your location.
         </p>
         <EnquiryButton />
-        <p className="meta">
-          Placeholder email is currently configured. Update with your final studio address before
-          launch.
-        </p>
+        <p className="meta">Enquiries go directly to the artist and are usually answered within a few days.</p>
       </div>
     </section>
   );

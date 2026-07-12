@@ -1,0 +1,15 @@
+# Netlify deploys this Next.js App Router site with the built-in Next.js
+# runtime (OpenNext adapter) — no legacy plugin or static export needed.
+# It supports Server Components, static generation, and next/image via the
+# Netlify Image CDN.
+#
+# Set these in Site settings -> Environment variables (see .env.example):
+#   NEXT_PUBLIC_SITE_URL      e.g. https://<your-site>.netlify.app
+#   NEXT_PUBLIC_ENQUIRY_EMAIL enquiry mailto target
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"

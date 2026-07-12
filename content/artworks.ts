@@ -241,7 +241,7 @@ const collectionsRaw = [
         "title": "Red Figure",
         "year": 2021,
         "medium": "Oil pastel on paper",
-        "dimensions": "32m x 26cm",
+        "dimensions": "32cm x 26cm",
         "image": {
           "small": "/images/2021/RedFigure-small.webp",
           "medium": "/images/2021/RedFigure-medium.webp",
@@ -500,8 +500,8 @@ const collectionsRaw = [
         "id": "2020-3-figures",
         "title": "3 Figures",
         "year": 2020,
-        "medium": "Medium not specified in legacy archive",
-        "dimensions": "Dimensions not specified in legacy archive",
+        "medium": "Not recorded",
+        "dimensions": "Not recorded",
         "image": {
           "small": "/images/2020/3Figures-small.webp",
           "medium": "/images/2020/3Figures-medium.webp",

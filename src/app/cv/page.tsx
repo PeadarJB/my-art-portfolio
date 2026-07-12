@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
+
 import { cvSections } from "@/content/site";
+
+export const metadata: Metadata = {
+  title: "CV",
+  description:
+    "Curriculum vitae for Peadar Jolliffe-Byrne: education, solo and group exhibitions, awards, residencies, collections, and projects.",
+  alternates: { canonical: "/cv" },
+};
 
 export default function CVPage() {
   return (

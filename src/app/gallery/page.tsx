@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
+
 import { GalleryGrid } from "@/components/gallery-grid";
 import { UplandFolkIntro } from "@/components/upland-folk-intro";
 import { artworksByYearDescending } from "@/content/artworks";
+
+export const metadata: Metadata = {
+  title: "Gallery",
+  description:
+    "Selected paintings and works on paper from 2019 to 2022, with detail views and direct enquiry.",
+  alternates: { canonical: "/gallery" },
+};
 
 export default function GalleryPage() {
   return (

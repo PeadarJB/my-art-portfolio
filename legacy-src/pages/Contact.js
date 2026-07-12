@@ -19,8 +19,17 @@ const ContactForm = () => {
       return;
     }
 
-    // If fields are filled, proceed with sending the email
-    emailjs.sendForm('peadarjb', 'studio_peadarjb_contact', form.current, '2f3L4kwmh5y22ciQS')
+    // If fields are filled, proceed with sending the email.
+    // NOTE: Legacy reference only. The live site uses a mailto enquiry flow and
+    // does not use EmailJS. The original service/template/public-key values were
+    // removed from source control and should be rotated in the EmailJS dashboard.
+    // If this form is ever revived, load these from environment variables.
+    emailjs.sendForm(
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+      form.current,
+      process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+    )
       .then(
         (result) => {
           console.log(result.text);
