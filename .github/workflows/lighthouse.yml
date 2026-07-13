@@ -1,0 +1,44 @@
+name: Lighthouse
+
+# Runs when Netlify finishes a deploy and reports it to GitHub. Netlify's GitHub
+# App posts a `deployment_status` with `state: success` and the live deploy URL,
+# so Lighthouse measures the REAL preview (Netlify Image CDN + headers), not a
+# local build — filling the Web-Vitals gap noted in the Phase 0 audit.
+#
+# Prerequisites / gotchas:
+#   * The repo must be connected to Netlify via the Netlify GitHub App with
+#     Deploy Previews enabled, so `deployment_status` events fire.
+#   * `deployment_status`-triggered workflows run the copy of this file on the
+#     DEFAULT branch (master). It will not run on the PR that introduces it —
+#     it activates once merged to master, then runs for every subsequent deploy.
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  statuses: write
+
+jobs:
+  lighthouse:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Lighthouse against the Netlify deploy
+        run: npx lhci autorun
+        env:
+          # environment_url is the deployed site; target_url is the fallback.
+          LHCI_TARGET_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+          # Lets LHCI post a commit status linking the report (no extra secret).
+          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

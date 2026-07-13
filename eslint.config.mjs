@@ -15,12 +15,17 @@ const eslintConfig = [
     // Legacy CRA reference, build output, and generated files are not linted.
     ignores: [
       ".next/**",
+      ".netlify/**",
       "out/**",
       "node_modules/**",
       "legacy-src/**",
       "next-env.d.ts",
       "coverage/**",
       "public/**",
+      "playwright-report/**",
+      "test-results/**",
+      "blob-report/**",
+      ".lighthouseci/**",
     ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),

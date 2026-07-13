@@ -12,5 +12,8 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./vitest.setup.ts"],
+    // Unit tests only. Playwright specs live in ./e2e and are run by
+    // `npm run test:e2e`, not Vitest.
+    include: ["tests/**/*.test.ts"],
   },
 });

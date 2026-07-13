@@ -14,7 +14,10 @@
 /coverage
 /test-results
 /playwright-report
+/blob-report
 /.playwright
+/playwright/.cache
+/.lighthouseci
 
 # next.js
 /.next/
