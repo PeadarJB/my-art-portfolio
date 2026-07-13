@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
-import { Sora, Spectral } from "next/font/google";
+import { Manrope, Newsreader } from "next/font/google";
 
 import { ArtworkLightbox } from "@/components/artwork-lightbox";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeSync } from "@/components/theme-sync";
 import { siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site";
 
 import "./globals.css";
 
-const sora = Sora({
+// Editorial display face. Only the roman weights the production interface uses
+// are loaded (no italic file) to minimise payload and layout shift.
+const newsreader = Newsreader({
   subsets: ["latin"],
-  variable: "--font-sans",
+  weight: ["400", "500", "600"],
+  variable: "--font-newsreader",
   display: "swap",
 });
 
-const spectral = Spectral({
+// Interface / body face for navigation, metadata, controls and utility text.
+const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-serif",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -68,7 +73,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className={`${sora.variable} ${spectral.variable}`}>
+      <body className={`${newsreader.variable} ${manrope.variable}`}>
         <ThemeSync />
         <a href="#main-content" className="skip-link">
           Skip to content
@@ -77,6 +82,7 @@ export default function RootLayout({
         <main id="main-content" tabIndex={-1} className="site-shell">
           {children}
         </main>
+        <SiteFooter />
         <ArtworkLightbox />
       </body>
     </html>

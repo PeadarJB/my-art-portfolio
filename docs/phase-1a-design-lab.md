@@ -10,6 +10,31 @@
 
 ---
 
+## 0. Approved (Phase 1B) — decision record
+
+The recommendations below were reviewed and **approved**, and promoted into the
+production design system in Phase 1B (see
+`docs/phase-1b-production-design-system.md`). This resolves the outstanding
+decisions in §12:
+
+- **Typography:** **Newsreader + Manrope** approved as the production pairing.
+- **Default background:** **warm paper `#f2eee6`** approved as the default
+  (pure white rejected as the default; kept only as a lab comparison).
+- **Atmospheric environment:** **soot `#171412`** with bone approved for
+  atmospheric/exhibition environments (currently applied to the lightbox).
+- **Accent:** **cadmium** approved as the principal interactive accent; ochre
+  restricted to large graphic marks; ultramarine/mineral held as reserved,
+  series-aware secondary accents.
+- **Instrument Serif:** **deferred** to a later series-level decision; it stays
+  confined to `/design-lab` and is not a production font.
+- **Existing images retained** for the build; **photo cleanup and gallery
+  visualisation are deferred** to a later content phase.
+
+This laboratory remains intact as the reference artefact and does **not** inherit
+the production tokens, so the original A/B/C comparison is preserved.
+
+---
+
 ## 1. Files created / changed
 
 **Created (all new, all under the isolated route or docs):**

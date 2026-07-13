@@ -1,43 +1,32 @@
-import Link from "next/link";
+import { ArchiveIndex } from "@/components/home/archive-index";
+import { FeaturedSeries } from "@/components/home/featured-series";
+import { HomeContact } from "@/components/home/home-contact";
+import { HomeHero } from "@/components/home/home-hero";
+import { HomeIntroduction } from "@/components/home/home-introduction";
+import { SelectedWorkGrid } from "@/components/home/selected-work-grid";
 
-import { yearlyCollectionSummaries } from "@/content/artworks";
-
+/**
+ * Homepage — the opening pages of an artist monograph followed by entry into a
+ * small digital exhibition:
+ *   1. Hero — the artist and a principal work.
+ *   2. Introduction — the character of the practice.
+ *   3. Featured Upland Folk — a local soot exhibition preview.
+ *   4. Selected works — a curated asymmetrical reading of the archive.
+ *   5. Archive index — a route into the complete archive.
+ *   6. Closing enquiry invitation.
+ *
+ * All curation lives in `content/homepage.ts`; this file only composes sections.
+ * Kept as a Server Component (no client-side state required).
+ */
 export default function HomePage() {
   return (
-    <section className="page page-home">
-      <div className="hero-glow" aria-hidden="true" />
-      <div className="hero-grid">
-        <p className="eyebrow">Artist Portfolio</p>
-        <h1 className="headline">Colour. Myth. Memory. Contemporary painting practice.</h1>
-        <p className="lede">
-          A modern archive of selected works from 2019 to 2022, rebuilt for fast image
-          delivery, immersive viewing, and direct collector enquiries.
-        </p>
-        <div className="cta-row">
-          <Link className="btn btn-primary" href="/gallery">
-            Enter Gallery
-          </Link>
-          <Link className="btn btn-secondary" href="/contact">
-            Make an enquiry
-          </Link>
-        </div>
-      </div>
-
-      <section className="year-summary">
-        <h2>Collections</h2>
-        <div className="year-cards">
-          {yearlyCollectionSummaries.map((summary) => (
-            <article key={summary.year} className="year-card">
-              <h3>{summary.year}</h3>
-              <p>{summary.story}</p>
-              <p className="meta">{summary.count} works</p>
-              <Link className="inline-link" href={`/gallery#year-${summary.year}`}>
-                View works
-              </Link>
-            </article>
-          ))}
-        </div>
-      </section>
-    </section>
+    <div className="home">
+      <HomeHero />
+      <HomeIntroduction />
+      <FeaturedSeries />
+      <SelectedWorkGrid />
+      <ArchiveIndex />
+      <HomeContact />
+    </div>
   );
 }
