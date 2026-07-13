@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Newsreader } from "next/font/google";
 
 import { ArtworkLightbox } from "@/components/artwork-lightbox";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeSync } from "@/components/theme-sync";
 import { siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site";
@@ -81,6 +82,7 @@ export default function RootLayout({
         <main id="main-content" tabIndex={-1} className="site-shell">
           {children}
         </main>
+        <SiteFooter />
         <ArtworkLightbox />
       </body>
     </html>

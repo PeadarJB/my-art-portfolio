@@ -887,11 +887,507 @@ a {
   }
 }
 
+/* =========================================================================
+   HOMEPAGE (Phase 2) — "The Animated Monograph" landing
+
+   Editorial, artwork-led, card-free. Production tokens only. The one new
+   atmospheric environment (`.home-featured`) redefines the semantic colour
+   tokens locally to soot/bone — the same pattern the lightbox uses — without
+   ever touching the theme store.
+   ========================================================================= */
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 8vw, 7rem);
+}
+
+/* Full-bleed band: extends to the viewport edges while its inner content
+   realigns to the capped canvas. Depends on `body { overflow-x: clip }`. */
+.home-bleed {
+  margin-inline: calc(50% - 50vw);
+}
+
+.home-bleed-inner {
+  width: 100%;
+  max-width: var(--canvas-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter-page);
+}
+
+/* ---------- Card-free artwork figure (hero / featured / selected) ---------- */
+.home-figure {
+  display: grid;
+  gap: var(--space-3);
+  color: var(--text-main);
+}
+
+.home-figure-frame {
+  display: block;
+}
+
+.home-figure-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.home-figure-caption {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.home-figure-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.home-figure-meta {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.home-figure:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 6px;
+}
+
+/* ---------- Hero ---------- */
+.home-hero {
+  display: grid;
+  gap: clamp(1.5rem, 5vw, 3.5rem);
+  align-items: center;
+  padding-top: clamp(0.5rem, 3vw, 2.5rem);
+}
+
+.home-hero-text {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.home-hero-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.home-hero-lede {
+  margin: 0;
+  max-width: 40ch;
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  color: var(--text-muted);
+}
+
+.home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.home-hero-art .home-figure {
+  justify-items: center;
+  text-align: center;
+}
+
+.home-hero-art .home-figure-image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(62vh, 560px);
+  margin-inline: auto;
+}
+
+@media (min-width: 860px) {
+  .home-hero {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  }
+
+  .home-hero-art .home-figure-image {
+    max-height: min(76vh, 760px);
+  }
+}
+
+/* ---------- Featured Upland Folk — local soot exhibition environment ------- */
+.home-featured {
+  --bg-canvas: var(--color-soot);
+  --text-main: var(--color-bone);
+  --text-muted: var(--color-dark-muted);
+  --accent-main: var(--color-cadmium-light);
+  --link: var(--color-cadmium-light);
+  --border-soft: var(--color-dark-line);
+  --focus-ring: var(--color-cadmium-light);
+
+  background: var(--color-soot);
+  color: var(--color-bone);
+  /* Hairline boundaries so the "room" reads as distinct even in dark theme. */
+  border-block: var(--line-width) solid var(--color-dark-line);
+}
+
+.home-featured-inner {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.home-featured-intro {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  max-width: var(--reading-max);
+}
+
+.home-featured-logo {
+  width: min(100%, 30rem);
+  height: auto;
+}
+
+.home-featured-context {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  max-width: 62ch;
+}
+
+.home-featured-plate {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  align-items: center;
+}
+
+.home-featured-supporting {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .home-featured-plate {
+    grid-template-columns: 1.25fr 0.75fr;
+  }
+
+  .home-featured-supporting {
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .home-featured-principal .home-figure-image {
+    width: auto;
+    max-width: 100%;
+    max-height: 70vh;
+    margin-inline: auto;
+  }
+}
+
+/* ---------- Selected works ---------- */
+.home-selected {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+.home-selected-heading,
+.home-archive-heading,
+.home-contact-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+  letter-spacing: -0.01em;
+}
+
+.home-anchor-band,
+.home-vertical-band {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+/* Hover/focus response is scoped to the rectangular selected works: the frame
+   clips a ≤1.5% enlargement invisibly. Transparent hero/featured works are
+   never scaled (their sculptural silhouettes must not be clipped). */
+.home-selected-item .home-figure-frame {
+  overflow: hidden;
+}
+
+.home-selected-item .home-figure-image {
+  transition: transform var(--motion-control) var(--ease-standard);
+}
+
+.home-selected-item:hover .home-figure-image {
+  transform: scale(1.012);
+}
+
+.home-selected-item .home-figure-title {
+  transition: color var(--motion-control) var(--ease-standard);
+}
+
+.home-selected-item:hover .home-figure-title,
+.home-selected-item:focus-visible .home-figure-title {
+  color: var(--link);
+}
+
+@media (min-width: 860px) {
+  .home-anchor-band {
+    grid-template-columns: 1.7fr 1fr;
+    align-items: start;
+  }
+
+  .home-anchor-band .role-anchor {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .home-vertical-band {
+    grid-template-columns: repeat(12, 1fr);
+    align-items: end;
+  }
+
+  .home-vertical-band > :nth-child(1) {
+    grid-column: 1 / span 4;
+  }
+
+  /* Offset the middle work upward for the "vertical conversation" stagger. */
+  .home-vertical-band > :nth-child(2) {
+    grid-column: 5 / span 4;
+    margin-bottom: clamp(2rem, 6vw, 4.5rem);
+  }
+
+  .home-vertical-band > :nth-child(3) {
+    grid-column: 9 / span 4;
+  }
+}
+
+/* ---------- Archive index ---------- */
+.home-archive {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.archive-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: var(--line-width) solid var(--border-soft);
+}
+
+.archive-row {
+  border-bottom: var(--line-width) solid var(--border-soft);
+}
+
+.archive-row-link {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: clamp(1rem, 2.5vw, 1.5rem) var(--space-2);
+  color: var(--text-main);
+  transition:
+    color var(--transition-fast),
+    padding-left var(--transition-fast);
+}
+
+.archive-row-link:hover,
+.archive-row-link:focus-visible {
+  color: var(--link);
+  padding-left: var(--space-4);
+}
+
+.archive-year {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+  min-width: 3.5ch;
+}
+
+.archive-count {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.archive-story {
+  color: var(--text-muted);
+}
+
+.archive-cue {
+  justify-self: end;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-main);
+}
+
+@media (max-width: 620px) {
+  .archive-row-link {
+    grid-template-columns: auto 1fr;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .archive-story {
+    grid-column: 1 / -1;
+  }
+
+  .archive-cue {
+    display: none;
+  }
+}
+
+/* ---------- Closing enquiry ---------- */
+.home-contact {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  max-width: var(--reading-max);
+}
+
+.home-contact-copy {
+  margin: 0;
+  max-width: 52ch;
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  color: var(--text-muted);
+}
+
+.home-contact-actions {
+  margin-top: var(--space-2);
+}
+
+/* ---------- Entrance motion (CSS-only, ≤16px, opacity + transform) -------- */
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes home-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.home-hero-text > * {
+  animation: home-rise var(--motion-transition) var(--ease-enter) both;
+}
+
+.home-hero-text > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.home-hero-text > *:nth-child(2) {
+  animation-delay: 70ms;
+}
+.home-hero-text > *:nth-child(3) {
+  animation-delay: 140ms;
+}
+.home-hero-text > *:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+.home-hero-art {
+  animation: home-fade var(--motion-editorial) var(--ease-enter) both;
+  animation-delay: 120ms;
+}
+
+/* =============================== Footer ================================ */
+/* Full-width surface with a hairline top divider; content aligns to the same
+   capped canvas as the header and page. Editorial, not a filled panel. */
+.site-footer {
+  border-top: var(--line-width) solid var(--border-soft);
+  background: var(--bg-canvas);
+}
+
+.site-footer-inner {
+  width: 100%;
+  max-width: var(--canvas-max);
+  margin-inline: auto;
+  padding: clamp(2rem, 5vw, 3.5rem) var(--gutter-page);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.site-footer-brand {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.site-footer-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--text-main);
+}
+
+.site-footer-tag {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.site-footer-nav a {
+  color: var(--text-main);
+  font-size: 0.95rem;
+  padding-bottom: 0.15em;
+  background-image: linear-gradient(var(--accent-main), var(--accent-main));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% var(--line-width);
+  transition:
+    background-size var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.site-footer-nav a:hover,
+.site-footer-nav a:focus-visible {
+  background-size: 100% var(--line-width);
+}
+
+.site-footer-legal {
+  margin: 0;
+  flex-basis: 100%;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Homepage reduced-motion: remove entrance animations entirely (so content is
+   immediately visible, with no fill-state flash during animation-delay) and
+   disable the hover enlargement. Static focus/colour feedback is preserved. */
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-text > *,
+  .home-hero-art {
+    animation: none;
+  }
+
+  .home-selected-item:hover .home-figure-image {
+    transform: none;
   }
 }

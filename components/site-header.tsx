@@ -42,45 +42,50 @@ export function SiteHeader() {
   }, [navOpen, setNavOpen]);
 
   return (
+    // Full-width sticky surface (background + border span the viewport) with a
+    // centred inner container capped at --canvas-max so the visible header
+    // content aligns with the page content on ultra-wide displays.
     <header className="site-header">
-      <Link href="/" className="brand-lockup" aria-label="Peadar Jolliffe-Byrne, home">
-        <span className="brand-title">Peadar Jolliffe-Byrne</span>
-      </Link>
+      <div className="site-header-inner">
+        <Link href="/" className="brand-lockup" aria-label="Peadar Jolliffe-Byrne, home">
+          <span className="brand-title">Peadar Jolliffe-Byrne</span>
+        </Link>
 
-      <button
-        type="button"
-        className="nav-toggle"
-        aria-expanded={navOpen}
-        aria-controls="primary-navigation"
-        aria-label={navOpen ? "Close menu" : "Open menu"}
-        onClick={() => setNavOpen(!navOpen)}
-      >
-        <span className="nav-toggle-bars" aria-hidden="true" />
-      </button>
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-expanded={navOpen}
+          aria-controls="primary-navigation"
+          aria-label={navOpen ? "Close menu" : "Open menu"}
+          onClick={() => setNavOpen(!navOpen)}
+        >
+          <span className="nav-toggle-bars" aria-hidden="true" />
+        </button>
 
-      <nav
-        id="primary-navigation"
-        className={clsx("site-nav", { "is-open": navOpen })}
-        aria-label="Primary"
-      >
-        {navItems.map((item) => {
-          const active =
-            item.href === "/" ? safePath === item.href : safePath.startsWith(item.href);
+        <nav
+          id="primary-navigation"
+          className={clsx("site-nav", { "is-open": navOpen })}
+          aria-label="Primary"
+        >
+          {navItems.map((item) => {
+            const active =
+              item.href === "/" ? safePath === item.href : safePath.startsWith(item.href);
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={clsx({ "is-active": active })}
-              aria-current={active ? "page" : undefined}
-              onClick={() => setNavOpen(false)}
-            >
-              {item.label}
-            </Link>
-          );
-        })}
-        <ThemeToggle />
-      </nav>
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={clsx({ "is-active": active })}
+                aria-current={active ? "page" : undefined}
+                onClick={() => setNavOpen(false)}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+          <ThemeToggle />
+        </nav>
+      </div>
     </header>
   );
 }
