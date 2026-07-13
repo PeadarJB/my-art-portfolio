@@ -1,0 +1,214 @@
+{
+  "audit": {
+    "phase": 0,
+    "date": "2026-07-12",
+    "branch": "nextjs-rebuild",
+    "commit": "2c6bced21eab3db230bf9589ac998d1cf6092b75",
+    "mainBranch": "master",
+    "workingTreeCleanBeforeAudit": true,
+    "filesCreated": ["docs/phase-0-audit.md", "docs/phase-0-manifest.json"],
+    "productionAppUnchanged": true
+  },
+  "toolchain": {
+    "packageManager": "npm",
+    "nodeVersion": "24",
+    "observedNode": "v24.11.1",
+    "observedNpm": "11.6.3",
+    "commands": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "eslint .",
+      "lintFix": "eslint . --fix",
+      "typecheck": "tsc --noEmit",
+      "test": "vitest run",
+      "testWatch": "vitest",
+      "optimizeImages": "node scripts/optimize-images.mjs"
+    },
+    "commandOutcomes": {
+      "typecheck": "pass",
+      "lint": "pass",
+      "test": "pass (2 files, 11 tests)",
+      "build": "pass (exit 0, 68 static pages)"
+    }
+  },
+  "framework": {
+    "name": "next",
+    "version": "^15.5.20",
+    "router": "app",
+    "react": "19.0.0",
+    "rendering": "static-first hybrid (SSG throughout; dynamic route prerendered via generateStaticParams)",
+    "language": "typescript",
+    "typescriptStrict": true,
+    "bundler": "next builtin",
+    "pathAlias": { "@/*": "./*" },
+    "middleware": false,
+    "cssModules": false,
+    "tailwind": false,
+    "cssInJs": false,
+    "animationLibrary": null,
+    "stateManagement": "zustand",
+    "validation": "zod",
+    "fonts": { "provider": "next/font/google", "families": ["Sora", "Spectral"], "selfHosted": true }
+  },
+  "dependencies": {
+    "runtime": ["clsx", "next", "react", "react-dom", "zod", "zustand"],
+    "dev": ["@testing-library/jest-dom", "@testing-library/react", "@types/node", "@types/react", "@types/react-dom", "eslint", "eslint-config-next", "jsdom", "prettier", "sharp", "typescript", "vitest"]
+  },
+  "envVars": {
+    "note": "names only; values redacted; both NEXT_PUBLIC_ (client-exposed, not secrets)",
+    "names": ["NEXT_PUBLIC_SITE_URL", "NEXT_PUBLIC_ENQUIRY_EMAIL"]
+  },
+  "routes": [
+    { "route": "/", "file": "src/app/page.tsx", "rendering": "static", "dataSource": "content/artworks.ts:yearlyCollectionSummaries" },
+    { "route": "/gallery", "file": "src/app/gallery/page.tsx", "rendering": "static", "dataSource": "content/artworks.ts:artworksByYearDescending" },
+    { "route": "/gallery/[year]/[artworkId]", "file": "src/app/gallery/[year]/[artworkId]/page.tsx", "rendering": "ssg", "dynamicParams": ["year", "artworkId"], "dataSource": "lib/artwork-queries.ts" },
+    { "route": "/about", "file": "src/app/about/page.tsx", "rendering": "static", "dataSource": "inline" },
+    { "route": "/cv", "file": "src/app/cv/page.tsx", "rendering": "static", "dataSource": "content/site.ts:cvSections" },
+    { "route": "/contact", "file": "src/app/contact/page.tsx", "rendering": "static", "dataSource": "inline" },
+    { "route": "/_not-found", "file": "src/app/not-found.tsx", "rendering": "static", "dataSource": "inline" },
+    { "route": "/sitemap.xml", "file": "src/app/sitemap.ts", "rendering": "generated" },
+    { "route": "/robots.txt", "file": "src/app/robots.ts", "rendering": "generated" },
+    { "route": "/opengraph-image", "file": "src/app/opengraph-image.tsx", "rendering": "generated" }
+  ],
+  "missingRoutes": ["error.tsx", "loading.tsx", "template.tsx", "footer", "standalone collection/year route"],
+  "components": [
+    { "name": "RootLayout", "file": "src/app/layout.tsx", "type": "server", "disposition": "preserve-restyle" },
+    { "name": "SiteHeader", "file": "components/site-header.tsx", "type": "client", "disposition": "preserve-restyle" },
+    { "name": "ThemeToggle", "file": "components/theme-toggle.tsx", "type": "client", "disposition": "preserve-restyle" },
+    { "name": "ThemeSync", "file": "components/theme-sync.tsx", "type": "client", "disposition": "preserve" },
+    { "name": "GalleryGrid", "file": "components/gallery-grid.tsx", "type": "server", "disposition": "preserve-restyle" },
+    { "name": "ArtworkCard", "file": "components/artwork-card.tsx", "type": "server", "disposition": "preserve-restyle" },
+    { "name": "UplandFolkIntro", "file": "components/upland-folk-intro.tsx", "type": "server", "disposition": "preserve-restyle" },
+    { "name": "ArtworkLightbox", "file": "components/artwork-lightbox.tsx", "type": "client", "disposition": "preserve" },
+    { "name": "LightboxTrigger", "file": "components/lightbox-trigger.tsx", "type": "client", "disposition": "preserve-restyle" },
+    { "name": "EnquiryButton", "file": "components/enquiry-button.tsx", "type": "server", "disposition": "preserve-restyle" }
+  ],
+  "styling": {
+    "methodology": "single global stylesheet + semantic classes + CSS custom properties",
+    "stylesheet": "src/app/globals.css",
+    "lineCount": 794,
+    "tokenLayers": ["primitive", "semantic", "component"],
+    "themeMechanism": "data-theme attribute on <html>",
+    "themePersistence": { "store": "zustand persist", "storage": "localStorage", "key": "portfolio-ui", "persistedKeys": ["theme"] },
+    "systemThemeDetection": false,
+    "noFlashScript": "src/app/layout.tsx:59",
+    "breakpoints": ["max-width: 720px", "max-width: 900px"],
+    "maxWidthContainer": false,
+    "reducedMotion": true,
+    "signaturePatterns": {
+      "pillButtons": ".btn/.btn-primary/.btn-secondary/.btn-compact (border-radius:999px)",
+      "cards": [".year-card", ".artwork-card", ".detail-meta-card", ".cv-card", ".contact-card", ".series-intro"],
+      "shadows": ["--shadow-soft", "--shadow-strong"],
+      "ctaGradient": "linear-gradient(120deg, --btn-from #0e7a86, --btn-to #bf4130)"
+    },
+    "canSupportTokensWithoutReplacement": true
+  },
+  "contentModel": {
+    "schemaFile": "lib/content-schema.ts",
+    "dataFile": "content/artworks.ts",
+    "fields": ["id", "title", "year", "medium", "dimensions", "image.small", "image.medium", "image.large", "image.alt", "image.width", "image.height"],
+    "allFieldsMandatory": true,
+    "missingFields": ["series", "availability", "description", "altImages", "detailImages", "installationImages", "exhibitionHistory", "relatedWorks", "tags", "featured", "explicitOrder"],
+    "totals": { "collections": 4, "artworks": 57, "byYear": { "2022": 8, "2021": 10, "2020": 15, "2019": 24 } },
+    "fieldCompletenessPercent": 100,
+    "dataQualityFlags": [
+      "2020-3-figures has medium/dimensions = 'Not recorded'",
+      "duplicate title 'Untitled' in 2020 and 2021 (ids unique)",
+      "alt text templated as '{title} artwork' for all 57",
+      "filename base often differs from title (e.g. morning-sun -> SummerDay)",
+      "stored image widths inconsistent (450-2200px)"
+    ],
+    "relatedWorks": "derived: prev/next within same year, wrapping (lib/artwork-queries.ts:getArtworkNeighbors)",
+    "yearsCollections": "from collectionsRaw array, sorted descending"
+  },
+  "imagePipeline": {
+    "sourceDir": "public/images/{2019,2020,2021,2022}",
+    "formats": { "webp": 171, "svg": 2 },
+    "outputFormats": ["image/avif", "image/webp"],
+    "variants": { "small": 640, "medium": 1280, "large": 2200 },
+    "variantUsage": { "card": "medium@82", "detail": "large@96 priority", "lightbox": "large@90 priority", "small": "unused" },
+    "totalBytesApprox": 34692292,
+    "bytesByYear": { "2019": 16472550, "2020": 9587886, "2021": 4920220, "2022": 3711636 },
+    "largestFiles": ["2019/personOnBeach-large.webp ~1.07MB", "2020/Female_portrait-large.webp ~1.01MB"],
+    "lazyLoading": "grid cards lazy; detail+lightbox priority",
+    "blurPlaceholder": false,
+    "explicitDimensions": true,
+    "cdn": "Netlify Image CDN (prod) via @netlify/plugin-nextjs",
+    "metadataStripped": true,
+    "iccProfilePreserved": false,
+    "objectFit": { "card": "none (width 100%, height auto)", "detail": "contain max-height 82vh", "lightbox": "contain max-height min(72vh,920px)" },
+    "optimizerScript": "scripts/optimize-images.mjs"
+  },
+  "animation": {
+    "libraries": [],
+    "pageTransitions": false,
+    "keyframes": false,
+    "scrollObservers": false,
+    "gestures": false,
+    "cssTransitionTokens": ["--transition-fast 180ms", "--transition-slow 420ms"],
+    "reducedMotion": true,
+    "viewTransitionsPractical": true
+  },
+  "deployment": {
+    "host": "netlify",
+    "config": "netlify.toml",
+    "plugin": "@netlify/plugin-nextjs",
+    "buildCommand": "npm run build",
+    "publish": ".next",
+    "staticExport": false,
+    "redirects": false,
+    "forms": false,
+    "netlifyForms": false,
+    "securityHeaders": ["Content-Security-Policy", "X-Content-Type-Options", "Referrer-Policy", "X-Frame-Options", "Permissions-Policy", "Strict-Transport-Security"],
+    "csp": "same-origin, script-src 'self' 'unsafe-inline'",
+    "sitemap": true,
+    "robots": true,
+    "openGraph": true,
+    "canonical": "per static page; detail route inherits base",
+    "structuredData": false,
+    "analytics": null,
+    "errorMonitoring": null
+  },
+  "accessibility": {
+    "skipLink": true,
+    "landmarks": ["header", "main", "nav"],
+    "footer": false,
+    "focusVisible": true,
+    "focusTrapLightbox": true,
+    "menuAria": true,
+    "reducedMotion": true,
+    "altTextTemplated": true,
+    "automatedScanRun": false,
+    "notes": ["contrast AA-tuned in tokens but not machine-verified", "verify small target sizes (.btn-compact, .lightbox-nav)"]
+  },
+  "performance": {
+    "buildResult": "pass",
+    "staticPages": 68,
+    "sharedFirstLoadJsKb": 102,
+    "firstLoadJsByRouteKb": { "/": 106, "/gallery": 111, "/gallery/[year]/[artworkId]": 112, "static": 103 },
+    "lighthouseRun": false,
+    "lcpCandidate": { "home": "text headline (no image)", "gallery": "first card image", "detail": "priority hero image" },
+    "clsRisk": "low (explicit image dimensions)",
+    "inpRisk": "low (minimal JS, no scroll listeners)",
+    "mainThreadAnimationRisk": "none"
+  },
+  "phase1": {
+    "reuse": ["css token system", "data+query layer", "theme system", "lightbox a11y", "next/image + Netlify CDN", "next/font", "CI"],
+    "avoid": ["switching styling framework", "output:export", "removing no-flash script", "weakening CSP", "unneeded animation library"],
+    "designLabLocation": "src/app/design-lab/",
+    "designLabExcludedFromNav": true,
+    "tokenFileRecommendation": "src/app/tokens.css imported before globals.css",
+    "containerQueriesPractical": true,
+    "viewTransitionsPractical": true,
+    "recommendedAnimation": "CSS-first + native View Transitions; JS lib only if brief needs springs/gestures/FLIP",
+    "openQuestions": [
+      "production enquiry email + form vs mailto",
+      "higher-res originals for soft 2021/2020 works",
+      "production domain for NEXT_PUBLIC_SITE_URL/canonicals/OG",
+      "adding descriptions/series/availability/exhibition/multi-image to schema",
+      "analytics/consent posture and CSP impact",
+      "descriptive vs templated alt text"
+    ]
+  }
+}
