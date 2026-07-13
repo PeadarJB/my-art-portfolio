@@ -17,9 +17,9 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          color: "#ffffff",
+          color: "#191714",
           fontFamily: "sans-serif",
-          background: "linear-gradient(135deg, #0e7a86 0%, #d9822b 55%, #bf4130 100%)",
+          background: "#f2eee6",
         }}
       >
         <div
@@ -27,7 +27,7 @@ export default function OpengraphImage() {
             fontSize: 34,
             letterSpacing: 8,
             textTransform: "uppercase",
-            opacity: 0.85,
+            color: "#b74034",
           }}
         >
           Art Portfolio
@@ -35,7 +35,7 @@ export default function OpengraphImage() {
         <div style={{ fontSize: 96, fontWeight: 700, marginTop: 24, lineHeight: 1.02 }}>
           {siteName}
         </div>
-        <div style={{ fontSize: 38, marginTop: 28, opacity: 0.92 }}>
+        <div style={{ fontSize: 38, marginTop: 28, color: "#595550" }}>
           Colour. Myth. Memory. Contemporary painting.
         </div>
       </div>

@@ -45,7 +45,6 @@ export function SiteHeader() {
     <header className="site-header">
       <Link href="/" className="brand-lockup" aria-label="Peadar Jolliffe-Byrne, home">
         <span className="brand-title">Peadar Jolliffe-Byrne</span>
-        <span className="brand-subtitle">Artist Portfolio</span>
       </Link>
 
       <button
