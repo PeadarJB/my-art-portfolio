@@ -72,3 +72,66 @@ you and, locally, reuses an already-running server on port 3000.
 lint/typecheck/unit/build `verify` job): `npm ci` →
 `npx playwright install --with-deps chromium` → `npm run build` →
 `npm run test:e2e`, and uploads the HTML report as an artifact.
+
+## Lighthouse CI (Web Vitals)
+
+Lighthouse CI (`@lhci/cli`) measures performance / accessibility / best-practices
+/ SEO and the core metrics (LCP, CLS, TBT). It fills the Web-Vitals gap noted in
+the Phase 0 audit.
+
+- **Config:** `lighthouserc.cjs`. It audits `/`, `/gallery` and one artwork detail
+  page, 3 runs each, and asserts a budget: accessibility is a hard gate
+  (`error`, ≥0.95); performance/best-practices/SEO and the individual metrics are
+  `warn` (this is an image-led portfolio — mobile image weight and a slow network
+  run shouldn't fail the pipeline, but the numbers are still surfaced). Reports
+  upload to `temporary-public-storage` (a public report URL per run; no server or
+  secret needed).
+- **URL:** reads `LHCI_TARGET_URL`. In CI that's the Netlify deploy URL, so
+  Lighthouse measures the **real preview** (Netlify Image CDN + headers). With no
+  env var it targets a local `next start`.
+
+```bash
+# Local run against the local production build:
+npm run build
+npm run lighthouse
+
+# Local run against a specific deployed URL (e.g. a Netlify preview):
+LHCI_TARGET_URL=https://deploy-preview-XX--your-site.netlify.app npm run lighthouse
+```
+
+### CI — `.github/workflows/lighthouse.yml`
+
+Triggered by `deployment_status`: when Netlify finishes a deploy and reports it to
+GitHub, the job runs `npx lhci autorun` against
+`deployment_status.environment_url` (the live deploy).
+
+**Two prerequisites/gotchas:**
+
+1. **Netlify → GitHub connection.** The repo must be connected via the Netlify
+   GitHub App with Deploy Previews enabled, so `deployment_status` events fire. If
+   your Netlify site is not GitHub-App-connected (the Phase 0 note about an
+   API-created build suggests confirming this), the workflow won't trigger — in
+   that case switch it to the token-based pattern (a `wait-for-netlify` action +
+   `NETLIFY_AUTH_TOKEN`/site-ID secrets) or run `npm run lighthouse` with an
+   explicit `LHCI_TARGET_URL` from another job.
+2. **Default-branch activation.** `deployment_status` workflows run the copy of
+   the file on the **default branch (`master`)**. This workflow will not run on
+   the PR that introduces it; it activates once merged to `master`, then runs on
+   every subsequent deploy.
+
+### Local execution note (this machine)
+
+`@lhci/cli` could not be run locally in the OneDrive-synced working copy: node
+throws `UNKNOWN … read (errno -4094)` while requiring the freshly-installed
+Lighthouse dependency files — the known OneDrive read-lock during sync (see the
+project memory), not a config problem. The config was validated independently
+(loads, resolves the three URLs and the seven assertions) and `next start` is
+known-good (the Playwright suite drives it). Lighthouse therefore runs in CI
+(Linux, unaffected) against the Netlify preview — which is also the only place a
+real preview URL exists. To run locally, let OneDrive finish syncing
+`node_modules` first (or use a non-synced checkout).
+
+## Not included (deliberately)
+
+- Visual-regression snapshots — Playwright's `toHaveScreenshot` is available if
+  wanted; left out for now to avoid baseline churn across OSes.

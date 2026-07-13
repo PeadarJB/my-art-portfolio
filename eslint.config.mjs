@@ -25,6 +25,7 @@ const eslintConfig = [
       "playwright-report/**",
       "test-results/**",
       "blob-report/**",
+      ".lighthouseci/**",
     ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
