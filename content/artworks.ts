@@ -5,6 +5,8 @@ import { artworkCollectionSchema, type ArtworkCollection } from "@/lib/content-s
 const collectionsRaw = [
   {
     "year": 2022,
+    "name": "Upland Folk",
+    "description": "Oil on board in artist made frames — the Burren, Co. Clare",
     "works": [
       {
         "id": "2022-remnants-of-the-wild-hunt",
@@ -130,6 +132,8 @@ const collectionsRaw = [
   },
   {
     "year": 2021,
+    "name": "Oil Pastels",
+    "description": "Oil pastel studies with intimate narrative energy",
     "works": [
       {
         "id": "2021-finn-and-i",
@@ -285,6 +289,8 @@ const collectionsRaw = [
   },
   {
     "year": 2020,
+    "name": "Works on Paper",
+    "description": "Mixed media across memory and landscape",
     "works": [
       {
         "id": "2020-jungle-poolside",
@@ -515,6 +521,8 @@ const collectionsRaw = [
   },
   {
     "year": 2019,
+    "name": "Early Works",
+    "description": "Travel, myth, and observation",
     "works": [
       {
         "id": "2019-pocho-s-first-lesson",
@@ -885,15 +893,8 @@ export const artworksByYearDescending: ArtworkCollection[] = z
   .parse(collectionsRaw)
   .sort((a, b) => b.year - a.year);
 
-const yearStory: Record<number, string> = {
-  2022: "Upland Folk series and sculptural framing explorations.",
-  2021: "Oil pastel studies with intimate narrative energy.",
-  2020: "Mixed-media transitions across memory and landscape.",
-  2019: "Early works shaped by travel, myth, and observation.",
-};
-
-export const yearlyCollectionSummaries = artworksByYearDescending.map((collection) => ({
-  year: collection.year,
-  count: collection.works.length,
-  story: yearStory[collection.year] ?? "Selected works from the archive.",
-}));
+/** Total number of works across every series (hero carousel counter base). */
+export const totalWorkCount = artworksByYearDescending.reduce(
+  (sum, collection) => sum + collection.works.length,
+  0
+);

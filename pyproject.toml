@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "artflow"
+version = "0.1.0"
+description = "Fidelity-first, review-gated artwork image processing for the portfolio"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "ImageHash>=4.3.2",
+  "numba>=0.60",
+  "numpy>=2.0,<3",
+  "opencv-python-headless>=4.11",
+  "Pillow>=11.2",
+  "pydantic>=2.11",
+  "pydantic-settings>=2.9",
+  "rembg[cpu]>=2.0.67",
+  "scikit-image>=0.25",
+  "sqlmodel>=0.0.24",
+  "streamlit>=1.45",
+  "typer>=0.16",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.82"]
+gemini = ["google-genai>=1.18"]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "pytest-cov>=6.1",
+  "ruff>=0.11",
+]
+
+[project.scripts]
+artflow = "artflow.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/artflow"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/artflow"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,30 +1,9 @@
 import type { Metadata } from "next";
-import { Manrope, Newsreader } from "next/font/google";
 
-import { ArtworkLightbox } from "@/components/artwork-lightbox";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import { ThemeSync } from "@/components/theme-sync";
+import { CustomCursor } from "@/components/custom-cursor";
 import { siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site";
 
 import "./globals.css";
-
-// Editorial display face. Only the roman weights the production interface uses
-// are loaded (no italic file) to minimise payload and layout shift.
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-newsreader",
-  display: "swap",
-});
-
-// Interface / body face for navigation, metadata, controls and utility text.
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-manrope",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -60,8 +39,10 @@ export const metadata: Metadata = {
   },
 };
 
-// Applied before paint so a stored dark theme does not flash light on load.
-const themeInitScript = `(function(){try{var t='light';var raw=localStorage.getItem('portfolio-ui');if(raw){var s=JSON.parse(raw);if(s&&s.state&&(s.state.theme==='dark'||s.state.theme==='light')){t=s.state.theme;}}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
+// Runs before paint: repeat visitors get `data-intro-seen` on <html> so the
+// homepage intro splash is display:none from the first frame; first-time
+// visitors get the session flag set so the splash never replays this session.
+const introInitScript = `(function(){try{if(sessionStorage.getItem('pjb-intro-seen')){document.documentElement.setAttribute('data-intro-seen','1')}else{sessionStorage.setItem('pjb-intro-seen','1')}}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -69,21 +50,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: introInitScript }} />
       </head>
-      <body className={`${newsreader.variable} ${manrope.variable}`}>
-        <ThemeSync />
+      <body>
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main-content" tabIndex={-1} className="site-shell">
-          {children}
-        </main>
-        <SiteFooter />
-        <ArtworkLightbox />
+        {children}
+        <CustomCursor />
       </body>
     </html>
   );

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import { cvSections } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -9,26 +11,42 @@ export const metadata: Metadata = {
   alternates: { canonical: "/cv" },
 };
 
+// Splits "2017-2018: MSc …" into a muted tabular year column and the entry
+// text. Rows without a year prefix (e.g. "OPW Collection.") span in full.
+function splitItem(item: string): { when: string; what: string } {
+  const match = item.match(/^([\d\-–]+):\s*(.*)$/);
+  return match ? { when: match[1], what: match[2] } : { when: "", what: item };
+}
+
 export default function CVPage() {
   return (
-    <section className="page prose-page">
-      <header className="page-header">
-        <p className="eyebrow">CV</p>
-        <h1 className="headline">Curriculum Vitae</h1>
-      </header>
+    <div className="page-shell">
+      <SiteHeader />
+      <div className="subbar has-rule-below">
+        <h1 className="subbar-label">CV</h1>
+        <span className="subbar-muted">Curriculum Vitae</span>
+      </div>
 
-      <div className="cv-grid">
+      <main id="main-content" className="cv-main">
         {cvSections.map((section) => (
-          <article key={section.title} className="cv-card">
+          <section key={section.title} className="cv-section">
             <h2>{section.title}</h2>
             <ul>
-              {section.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
+              {section.items.map((item) => {
+                const { when, what } = splitItem(item);
+                return (
+                  <li key={item}>
+                    <span className="cv-year">{when}</span>
+                    <span>{what}</span>
+                  </li>
+                );
+              })}
             </ul>
-          </article>
+          </section>
         ))}
-      </div>
-    </section>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }

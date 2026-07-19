@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { EnquiryButton } from "@/components/enquiry-button";
-import { LightboxTrigger } from "@/components/lightbox-trigger";
+import { DetailView } from "@/components/detail-view";
 import {
   getArtworkByYearAndId,
   getArtworkNeighbors,
   getArtworkRouteParams,
-  getYearArtworks,
 } from "@/lib/artwork-queries";
 
 type ArtworkDetailPageProps = {
@@ -60,88 +56,15 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
     notFound();
   }
 
-  const yearWorks = getYearArtworks(year);
   const neighbors = getArtworkNeighbors(year, resolved.artworkId);
 
   return (
-    <section className="page detail-page">
-      <header className="page-header">
-        <p className="eyebrow">Artwork Detail</p>
-        <h1 className="headline">{work.title}</h1>
-        <p className="lede">{work.medium}</p>
-      </header>
-
-      <div className="detail-top-actions">
-        <Link className="btn btn-secondary" href={`/gallery#year-${work.year}`}>
-          Back to {work.year} collection
-        </Link>
-        <LightboxTrigger
-          items={yearWorks}
-          startId={work.id}
-          className="btn btn-primary"
-          label="Open high-fidelity lightbox"
-        />
-      </div>
-
-      <div className="detail-image-shell">
-        <Image
-          src={work.image.large}
-          alt={work.image.alt}
-          width={work.image.width}
-          height={work.image.height}
-          className="detail-image"
-          quality={96}
-          priority
-          sizes="(max-width: 900px) 95vw, 82vw"
-        />
-      </div>
-
-      <section className="detail-meta-grid">
-        <article className="detail-meta-card">
-          <h2>Artwork Information</h2>
-          <dl>
-            <div>
-              <dt>Title</dt>
-              <dd>{work.title}</dd>
-            </div>
-            <div>
-              <dt>Year</dt>
-              <dd>{work.year}</dd>
-            </div>
-            <div>
-              <dt>Medium</dt>
-              <dd>{work.medium}</dd>
-            </div>
-            <div>
-              <dt>Dimensions</dt>
-              <dd>{work.dimensions}</dd>
-            </div>
-          </dl>
-        </article>
-
-        <article className="detail-meta-card">
-          <h2>Actions</h2>
-          <div className="detail-action-list">
-            <EnquiryButton title={work.title} />
-            {neighbors.previous ? (
-              <Link
-                className="btn btn-secondary"
-                href={`/gallery/${neighbors.previous.year}/${neighbors.previous.id}`}
-              >
-                Previous work
-              </Link>
-            ) : null}
-            {neighbors.next ? (
-              <Link className="btn btn-secondary" href={`/gallery/${neighbors.next.year}/${neighbors.next.id}`}>
-                Next work
-              </Link>
-            ) : null}
-            <p className="meta">
-              {neighbors.index + 1} of {neighbors.total} in {work.year}
-            </p>
-          </div>
-        </article>
-      </section>
-    </section>
+    <DetailView
+      work={work}
+      previous={neighbors.previous}
+      next={neighbors.next}
+      index={neighbors.index}
+      total={neighbors.total}
+    />
   );
 }

@@ -18,6 +18,21 @@ describe("artwork content", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  it("names every series (navigation is series-name-first)", () => {
+    const names = Object.fromEntries(
+      artworksByYearDescending.map((collection) => [collection.year, collection.name])
+    );
+    expect(names).toEqual({
+      2022: "Upland Folk",
+      2021: "Oil Pastels",
+      2020: "Works on Paper",
+      2019: "Early Works",
+    });
+    for (const collection of artworksByYearDescending) {
+      expect(collection.description.length).toBeGreaterThan(0);
+    }
+  });
+
   it("uses well-formed webp variant paths and positive dimensions", () => {
     for (const work of allWorks) {
       for (const key of ["small", "medium", "large"] as const) {

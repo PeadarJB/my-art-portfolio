@@ -1,120 +1,56 @@
 /* =========================================================================
-   PRODUCTION DESIGN SYSTEM — "The Animated Monograph" (Phase 1B)
+   V2 GALLERY REDESIGN — production design system
 
-   Three-layer token architecture (unchanged from Phase 0):
-     1. Primitive tokens  — raw palette, spacing, radius, shadow, motion.
-     2. Semantic tokens    — role-based aliases resolved per data-theme.
-     3. Component tokens    — scoped overrides (e.g. the lightbox soot room).
+   Gallery-grade language: white ground, a single neutral grotesque, hairline
+   rules, cadmium red as the only accent, and a soot "dark room" reserved
+   exclusively for the Upland Folk series. Slideshow-first browsing with
+   counters, and a custom circle cursor on fine pointers.
 
-   Phase 1B promotes the approved Phase 1A foundations into production:
-   Newsreader/Manrope, warm-paper light + soot/bone dark, cadmium accent,
-   square artwork edges, flattened shadows, editorial controls. Existing
-   selectors and behaviour are preserved; only their values move so the
-   pages inherit the new language without page-specific JSX rewrites.
+   Token layers:
+     1. Primitive palette (fixed hex values from the design handoff).
+     2. Room tokens (--room-*) — resolved per room; `.room.is-soot` swaps the
+        whole page (or stage) into the Upland Folk dark room with a 600ms
+        crossfade. Everything inside reads the room tokens, so components
+        never branch on palette themselves.
    ========================================================================= */
 
 :root {
-  /* ---------- Primitive palette: editorial light environment ---------- */
-  --color-paper: #f2eee6;
-  --color-paper-raised: #f8f5ef;
-  --color-ink: #191714;
-  --color-graphite: #595550;
-  --color-muted: #6f6a64;
-  --color-line: #cfc7bb;
-
-  /* ---------- Primitive palette: atmospheric dark environment ---------- */
-  --color-soot: #171412;
-  --color-soot-raised: #1f1b18;
-  --color-bone: #eee8de;
-  --color-dark-muted: #bdb4a8;
-  --color-dark-line: #3a3430;
-
-  /* ---------- Primitive accents ---------- */
-  /* Cadmium is the principal interactive accent. */
+  /* ---------- Primitive palette: white gallery ---------- */
+  --color-white: #ffffff;
+  --color-ink: #131313;
+  --color-muted: #757575;
   --color-cadmium: #b74034;
-  /* Lifted cadmium: legible links / accents on soot (AA on dark). */
-  --color-cadmium-light: #d98a80;
-  /* Secondary, future series-aware accents — not used in the global shell. */
-  --color-ultramarine: #31578a;
-  --color-mineral: #4e6551;
-  /* Ochre is for large graphic marks only; never body text on paper. */
-  --color-ochre: #b98328;
+  --color-rule-secondary: #dcdcdc;
+  --color-body-secondary: #454545;
+  --color-row-hover: #f7f6f4;
 
-  /* ---------- Type roles ---------- */
-  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
-  --font-body: var(--font-manrope), "Segoe UI", Arial, sans-serif;
+  /* ---------- Primitive palette: soot room (Upland Folk only) ---------- */
+  --color-soot: #171412;
+  --color-soot-ink: #eee8de;
+  --color-soot-muted: #bdb4a8;
+  --color-soot-accent: #d98a80;
+  --color-soot-rule: #3a3430;
+  --color-soot-row-hover: #221d19;
 
-  /* ---------- Spacing scale ---------- */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-7: 3rem;
-  --space-8: 4rem;
+  /* ---------- Type ---------- */
+  /* Single grotesque, no serif anywhere. Weights 400/600 only. */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  /* ---------- Layout / containers ---------- */
-  --gutter-page: clamp(1.25rem, 4vw, 6rem);
-  --canvas-max: 106rem;
-  --reading-max: 64ch;
-  --line-width: 1px;
-
-  /* ---------- Shape ---------- */
-  --radius-image: 0;
-  --radius-control: 0.2rem;
-  --radius-overlay: 0.3rem;
-  /* Legacy radius aliases re-pointed onto the flattened scale so existing
-     rules square up without edits. */
-  --radius-sm: var(--radius-image);
-  --radius-md: var(--radius-control);
-  --radius-lg: var(--radius-overlay);
-
-  /* ---------- Elevation ---------- */
-  --shadow-content: none;
-  --shadow-overlay: 0 1rem 3rem rgb(0 0 0 / 0.16);
-  /* Legacy shadow aliases: content is flat, overlays keep depth. */
-  --shadow-soft: var(--shadow-content);
-  --shadow-strong: var(--shadow-overlay);
+  /* ---------- Structure ---------- */
+  --gutter: clamp(16px, 2.5vw, 32px);
+  --line: 1px;
 
   /* ---------- Motion ---------- */
-  --motion-micro: 150ms;
-  --motion-control: 240ms;
-  --motion-transition: 520ms;
-  --motion-editorial: 800ms;
   --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  /* Legacy transition aliases (duration + easing bundles). */
-  --transition-fast: var(--motion-control) var(--ease-standard);
-  --transition-slow: var(--motion-editorial) var(--ease-enter);
-}
+  --room-fade: 600ms;
+  --hover-fade: 160ms;
 
-/* ---------- Semantic tokens: editorial light (warm paper) ---------- */
-[data-theme="light"] {
-  --bg-canvas: var(--color-paper);
-  --bg-card: var(--color-paper-raised);
-  --bg-card-strong: var(--color-paper-raised);
-  --text-main: var(--color-ink);
-  --text-muted: var(--color-muted);
-  --accent-main: var(--color-cadmium);
-  --accent-alt: var(--color-ultramarine); /* reserved; not used in shell */
-  --border-soft: var(--color-line);
-  --link: var(--color-cadmium);
-  --focus-ring: var(--color-cadmium);
-}
-
-/* ---------- Semantic tokens: atmospheric dark (soot & bone) ---------- */
-[data-theme="dark"] {
-  --bg-canvas: var(--color-soot);
-  --bg-card: var(--color-soot-raised);
-  --bg-card-strong: var(--color-soot-raised);
-  --text-main: var(--color-bone);
-  --text-muted: var(--color-dark-muted);
-  --accent-main: var(--color-cadmium-light);
-  --accent-alt: var(--color-ultramarine); /* reserved; not used in shell */
-  --border-soft: var(--color-dark-line);
-  --link: var(--color-cadmium-light);
-  --focus-ring: var(--color-cadmium-light);
+  /* ---------- Default room: white ---------- */
+  --room-bg: var(--color-white);
+  --room-ink: var(--color-ink);
+  --room-muted: var(--color-muted);
+  --room-accent: var(--color-cadmium);
+  --room-row-hover: var(--color-row-hover);
 }
 
 *,
@@ -130,17 +66,23 @@ body {
 }
 
 body {
-  min-height: 100vh;
-  font-family: var(--font-body);
-  color: var(--text-main);
-  background: var(--bg-canvas);
-  line-height: 1.55;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: var(--color-ink);
+  background: var(--color-white);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  /* Guard: full-bleed homepage bands (`.home-bleed`) extend to 100vw via
-     negative margins; clip on x prevents a horizontal scrollbar. `clip`
-     (not `hidden`) does not create a scroll container, so the sticky header
-     is unaffected. */
   overflow-x: clip;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
 }
 
 /* Screen-reader-only text (visible to assistive tech, removed from layout). */
@@ -156,21 +98,14 @@ body {
   border: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 /* Visible keyboard focus for every interactive element. */
 :focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 2px solid var(--room-accent);
   outline-offset: 2px;
-  border-radius: var(--radius-control);
 }
 
-/* The main region is a programmatic skip-link target, not a control. */
-.site-shell:focus,
-.site-shell:focus-visible {
+main:focus,
+main:focus-visible {
   outline: none;
 }
 
@@ -178,1087 +113,133 @@ a {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 200;
-  margin: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: var(--bg-card-strong);
-  color: var(--text-main);
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-control);
-  box-shadow: var(--shadow-overlay);
+  z-index: 10001;
+  margin: 8px;
+  padding: 8px 16px;
+  background: var(--color-white);
+  color: var(--color-ink);
+  border: var(--line) solid var(--color-ink);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   transform: translateY(-160%);
-  transition: transform var(--transition-fast);
+  transition: transform var(--hover-fade);
 }
 
 .skip-link:focus {
   transform: translateY(0);
 }
 
-/* =============================== Header ================================= */
-/* Full-width sticky surface: background + border span the viewport. */
-.site-header {
-  position: sticky;
+/* ========================== Custom circle cursor ========================= */
+/* Native cursor hidden on fine pointers only; the difference-blended circle
+   self-inverts on any ground. Restored to native on coarse pointers. */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
+.cursor-dot {
+  position: fixed;
   top: 0;
-  z-index: 50;
-  border-bottom: var(--line-width) solid var(--border-soft);
-  backdrop-filter: blur(12px);
-  background: color-mix(in srgb, var(--bg-card-strong) 82%, transparent);
-}
-
-/* Centred inner container capped at the same --canvas-max as page content so
-   the brand and nav align with the content column on ultra-wide displays. */
-.site-header-inner {
-  width: 100%;
-  max-width: var(--canvas-max);
-  margin-inline: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--gutter-page);
-}
-
-.brand-lockup {
-  display: grid;
-  gap: var(--space-1);
-}
-
-.brand-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-  letter-spacing: -0.005em;
-  line-height: 1.1;
-}
-
-/* Editorial nav: no pills. Active state is a persistent hairline + aria-current;
-   hover grows the same rule (a non-colour signal, not colour alone). */
-.site-nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.site-nav a {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--text-main);
-  padding: 0.35rem 0;
-  padding-bottom: 0.2em;
-  background-image: linear-gradient(var(--accent-main), var(--accent-main));
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 0% var(--line-width);
-  transition: background-size var(--transition-fast), color var(--transition-fast);
-}
-
-.site-nav a:hover,
-.site-nav a:focus-visible {
-  background-size: 100% var(--line-width);
-}
-
-.site-nav a.is-active {
-  background-size: 100% var(--line-width);
-  color: var(--text-main);
-}
-
-/* Restrained utility toggle — no pill, no lift, no accent flood. */
-.theme-toggle {
-  font-family: var(--font-body);
-  border: var(--line-width) solid var(--border-soft);
-  background: transparent;
-  border-radius: var(--radius-control);
-  padding: var(--space-2) var(--space-3);
-  font-size: 0.8rem;
-  letter-spacing: 0.01em;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: border-color var(--transition-fast), color var(--transition-fast);
-}
-
-.theme-toggle:hover {
-  border-color: var(--text-main);
-}
-
-/* Mobile menu button (hidden on wider viewports). */
-.nav-toggle {
-  display: none;
-  width: 44px;
-  height: 44px;
-  align-items: center;
-  justify-content: center;
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-control);
-  background: transparent;
-  color: var(--text-main);
-  cursor: pointer;
-}
-
-.nav-toggle-bars,
-.nav-toggle-bars::before,
-.nav-toggle-bars::after {
-  content: "";
-  display: block;
-  width: 20px;
-  height: 2px;
-  border-radius: 2px;
-  background: currentColor;
-}
-
-.nav-toggle-bars {
-  position: relative;
-}
-
-.nav-toggle-bars::before,
-.nav-toggle-bars::after {
-  position: absolute;
   left: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  transition:
+    background-color var(--hover-fade),
+    border-color var(--hover-fade);
+  will-change: transform;
 }
 
-.nav-toggle-bars::before {
-  top: -6px;
+/* Over any clickable: fills solid white — still difference-blended. */
+.cursor-dot.is-active {
+  background-color: #ffffff;
 }
 
-.nav-toggle-bars::after {
-  top: 6px;
-}
-
-@media (max-width: 720px) {
-  .site-header-inner {
-    flex-wrap: wrap;
-  }
-
-  .nav-toggle {
-    display: inline-flex;
-  }
-
-  .site-nav {
-    order: 3;
-    flex-basis: 100%;
+@media (pointer: coarse) {
+  .cursor-dot {
     display: none;
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-1);
-    padding-top: var(--space-3);
-  }
-
-  .site-nav.is-open {
-    display: flex;
-    animation: nav-drop var(--motion-control) var(--ease-enter) both;
-  }
-
-  .site-nav a {
-    padding: var(--space-3) 0;
   }
 }
 
-@keyframes nav-drop {
+/* ============================== Rooms ==================================== */
+/* A room is any region that can crossfade between white and soot. The whole
+   gallery/detail page is one room; the home hero stage is its own room. */
+.room {
+  background: var(--room-bg);
+  color: var(--room-ink);
+  transition:
+    background-color var(--room-fade),
+    color var(--room-fade);
+}
+
+.room.is-soot {
+  --room-bg: var(--color-soot);
+  --room-ink: var(--color-soot-ink);
+  --room-muted: var(--color-soot-muted);
+  --room-accent: var(--color-soot-accent);
+  --room-row-hover: var(--color-soot-row-hover);
+}
+
+/* =========================== Intro splash ================================ */
+@keyframes intro-name {
   from {
     opacity: 0;
-    transform: translateY(-0.5rem);
+    letter-spacing: 0.42em;
+    transform: translateY(18px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    letter-spacing: 0.14em;
+    transform: none;
   }
 }
 
-/* =============================== Shell ================================= */
-.site-shell {
-  width: 100%;
-  max-width: var(--canvas-max);
-  margin-inline: auto;
-  padding: clamp(1rem, 3vw, 2rem) var(--gutter-page) var(--space-8);
-}
-
-.page {
-  display: grid;
-  gap: var(--space-7);
-}
-
-.page-header {
-  display: grid;
-  gap: var(--space-3);
-  max-width: 70ch;
-}
-
-.eyebrow {
-  margin: 0;
-  font-size: 0.78rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.headline {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(2rem, 6vw, 4.4rem);
-  line-height: 1.04;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-}
-
-.lede {
-  margin: 0;
-  font-size: clamp(1rem, 2.6vw, 1.35rem);
-  color: var(--text-muted);
-  max-width: 68ch;
-}
-
-/* Small uppercase section label promoted to a real heading where a section
-   needs an <h2> without a large visible title. */
-.section-eyebrow {
-  margin: 0;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.78rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-/* =============================== Buttons =============================== */
-/* Filled actions are rare and reserved for genuine actions/enquiries. */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.95rem;
-  line-height: 1.2;
-  letter-spacing: 0;
-  text-transform: none;
-  padding: 0.72rem 1.3rem;
-  border: var(--line-width) solid transparent;
-  border-radius: var(--radius-control);
-  cursor: pointer;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    border-color var(--transition-fast);
-}
-
-/* Solid ink (light) / bone (dark), inverting text off the page background;
-   comes alive to cadmium on hover. No gradient, pill or shadow. */
-.btn-primary {
-  color: var(--bg-canvas);
-  background: var(--text-main);
-  border-color: var(--text-main);
-}
-
-.btn-primary:hover {
-  background: var(--color-cadmium);
-  border-color: var(--color-cadmium);
-  color: #fff;
-}
-
-.btn-secondary {
-  color: var(--text-main);
-  background: transparent;
-  border-color: var(--border-soft);
-}
-
-.btn-secondary:hover {
-  border-color: var(--text-main);
-}
-
-.btn-compact {
-  padding: 0.55rem 0.95rem;
-  font-size: 0.85rem;
-}
-
-/* ============================ Shared utilities ========================= */
-.meta {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-/* Editorial text link: underline always present (not colour alone). */
-.inline-link {
-  color: var(--link);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-  transition: color var(--transition-fast);
-}
-
-.inline-link:hover {
-  color: var(--text-main);
-}
-
-.year-section {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.series-intro {
-  display: grid;
-  gap: var(--space-5);
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-lg);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-soft);
-  padding: clamp(1rem, 3vw, 2rem);
-}
-
-.series-intro-title-wrap {
-  display: grid;
-  place-items: center;
-}
-
-.series-title-logo {
-  width: min(100%, 48rem);
-  height: auto;
-}
-
-.series-title-logo-dark {
-  display: none;
-}
-
-[data-theme="dark"] .series-title-logo-light {
-  display: none;
-}
-
-[data-theme="dark"] .series-title-logo-dark {
-  display: block;
-}
-
-.series-intro-copy {
-  display: grid;
-  gap: var(--space-3);
-  max-width: 72ch;
-}
-
-.series-intro-copy h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.25rem, 2.4vw, 1.8rem);
-}
-
-.series-intro-copy p {
-  margin: 0;
-}
-
-.series-intro-actions {
-  display: flex;
-}
-
-.year-section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-3);
-}
-
-.year-section-header h2,
-.year-section-header p {
-  margin: 0;
-}
-
-/* ============================== Gallery ================================ */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-4);
-}
-
-.artwork-card {
-  display: grid;
-  gap: var(--space-3);
-  background: var(--bg-card);
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-soft);
-  padding: var(--space-3);
-}
-
-/* Artwork images are square-edged; no CSS shadow or coloured frame. */
-.artwork-image-shell {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-image);
-  background: color-mix(in srgb, var(--bg-card-strong) 50%, transparent);
-}
-
-.artwork-image {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.artwork-card h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.15rem;
-}
-
-.artwork-title-link {
-  transition: color var(--transition-fast);
-}
-
-.artwork-title-link:hover {
-  color: var(--link);
-}
-
-.artwork-card p {
-  margin: 0;
-}
-
-.artwork-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-/* ============================ Artwork detail =========================== */
-.detail-page {
-  gap: var(--space-5);
-}
-
-.detail-top-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-
-/* Square, unshadowed frame; hairline retained for separation only. */
-.detail-image-shell {
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-image);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-}
-
-.detail-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 82vh;
-  object-fit: contain;
-}
-
-.detail-meta-grid {
-  display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-
-.detail-meta-card {
-  display: grid;
-  gap: var(--space-3);
-  padding: var(--space-5);
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-md);
-  background: var(--bg-card);
-}
-
-.detail-meta-card h2 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.2rem;
-}
-
-.detail-meta-card dl {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-}
-
-.detail-meta-card dt {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-}
-
-.detail-meta-card dd {
-  margin: 0;
-}
-
-.detail-action-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-/* =============================== Lightbox ============================== */
-/* Chrome only — focus trap, keyboard nav, inert background, scroll lock and
-   focus restoration all live in the component and are untouched. */
-.lightbox-backdrop {
+.intro-splash {
   position: fixed;
   inset: 0;
-  z-index: 120;
-  padding: clamp(0.8rem, 2vw, 1.5rem);
-  background: rgb(23 20 18 / 0.9);
-  backdrop-filter: blur(8px);
-}
-
-/* The shell is an atmospheric soot room in BOTH themes: it locally redefines
-   the semantic tokens so nested buttons/text/borders adapt automatically. */
-.lightbox-shell {
-  --bg-canvas: var(--color-soot);
-  --bg-card: rgb(255 255 255 / 0.06);
-  --bg-card-strong: rgb(255 255 255 / 0.08);
-  --text-main: var(--color-bone);
-  --text-muted: var(--color-dark-muted);
-  --border-soft: rgb(255 255 255 / 0.18);
-  --link: var(--color-cadmium-light);
-  --accent-main: var(--color-cadmium-light);
-  --focus-ring: var(--color-cadmium-light);
-
-  width: min(1200px, 100%);
-  max-height: calc(100vh - 1.8rem);
-  margin: 0 auto;
-  border-radius: var(--radius-overlay);
-  border: var(--line-width) solid rgb(255 255 255 / 0.14);
-  background: var(--color-soot);
-  color: var(--color-bone);
-  box-shadow: var(--shadow-overlay);
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  overflow: hidden;
-}
-
-.lightbox-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-bottom: var(--line-width) solid rgb(255 255 255 / 0.12);
-}
-
-.lightbox-counter {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-
-.lightbox-close,
-.lightbox-nav {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: var(--line-width) solid rgb(255 255 255 / 0.24);
-  border-radius: var(--radius-control);
-  background: transparent;
-  color: var(--color-bone);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  padding: 0.5rem 0.95rem;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
-}
-
-.lightbox-close:hover,
-.lightbox-nav:hover {
-  border-color: rgb(255 255 255 / 0.6);
-  background: rgb(255 255 255 / 0.06);
-}
-
-.lightbox-frame {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  min-height: 0;
-}
-
-.lightbox-image-wrap {
-  min-height: 0;
+  background: var(--color-white);
+  z-index: 9998;
   display: grid;
   place-items: center;
-  overflow: auto;
-  border-radius: var(--radius-image);
+  opacity: 1;
+  transition: opacity 700ms var(--ease-enter);
 }
 
-.lightbox-image {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  max-height: min(72vh, 920px);
-  object-fit: contain;
+.intro-splash.is-out {
+  opacity: 0;
 }
 
-.lightbox-meta {
-  border-top: var(--line-width) solid rgb(255 255 255 / 0.12);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-3);
-  padding: var(--space-4);
-}
-
-.lightbox-meta h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-}
-
-.lightbox-meta p {
-  margin: 0;
-}
-
-.lightbox-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-/* =============================== Contact =============================== */
-.contact-card {
-  display: grid;
-  gap: var(--space-4);
-  max-width: 52ch;
-  padding: var(--space-6);
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-lg);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-content);
-}
-
-/* ============================= Prose / CV ============================== */
-.prose-page .prose {
-  max-width: var(--reading-max);
-  display: grid;
-  gap: var(--space-4);
-}
-
-.prose p {
-  margin: 0;
-  color: var(--text-main);
-}
-
-.cv-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-4);
-}
-
-.cv-card {
-  display: grid;
-  gap: var(--space-3);
-  padding: var(--space-5);
-  background: var(--bg-card);
-  border: var(--line-width) solid var(--border-soft);
-  border-radius: var(--radius-md);
-}
-
-.cv-card h2 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-family: var(--font-display);
-  font-weight: 500;
-}
-
-.cv-card ul {
-  margin: 0;
-  padding-left: 1.1rem;
-  display: grid;
-  gap: var(--space-2);
-}
-
-@media (max-width: 900px) {
-  .lightbox-frame {
-    grid-template-columns: 1fr;
-  }
-
-  .lightbox-nav {
-    justify-self: center;
-  }
-
-  .lightbox-image {
-    max-height: 64vh;
-  }
-}
-
-/* =========================================================================
-   HOMEPAGE (Phase 2) — "The Animated Monograph" landing
-
-   Editorial, artwork-led, card-free. Production tokens only. The one new
-   atmospheric environment (`.home-featured`) redefines the semantic colour
-   tokens locally to soot/bone — the same pattern the lightbox uses — without
-   ever touching the theme store.
-   ========================================================================= */
-.home {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(3.5rem, 8vw, 7rem);
-}
-
-/* Full-bleed band: extends to the viewport edges while its inner content
-   realigns to the capped canvas. Depends on `body { overflow-x: clip }`. */
-.home-bleed {
-  margin-inline: calc(50% - 50vw);
-}
-
-.home-bleed-inner {
-  width: 100%;
-  max-width: var(--canvas-max);
-  margin-inline: auto;
-  padding-inline: var(--gutter-page);
-}
-
-/* ---------- Card-free artwork figure (hero / featured / selected) ---------- */
-.home-figure {
-  display: grid;
-  gap: var(--space-3);
-  color: var(--text-main);
-}
-
-.home-figure-frame {
-  display: block;
-}
-
-.home-figure-image {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.home-figure-caption {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.home-figure-title {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.1rem;
-  line-height: 1.2;
-}
-
-.home-figure-meta {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-}
-
-.home-figure:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 6px;
-}
-
-/* ---------- Hero ---------- */
-.home-hero {
-  display: grid;
-  gap: clamp(1.5rem, 5vw, 3.5rem);
-  align-items: center;
-  padding-top: clamp(0.5rem, 3vw, 2.5rem);
-}
-
-.home-hero-text {
-  display: grid;
-  gap: var(--space-4);
-  align-content: start;
-}
-
-.home-hero-name {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(2.4rem, 6vw, 4.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.015em;
-  text-wrap: balance;
-}
-
-.home-hero-lede {
-  margin: 0;
-  max-width: 40ch;
-  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-  color: var(--text-muted);
-}
-
-.home-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-2);
-}
-
-.home-hero-art .home-figure {
-  justify-items: center;
-  text-align: center;
-}
-
-.home-hero-art .home-figure-image {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: min(62vh, 560px);
-  margin-inline: auto;
-}
-
-@media (min-width: 860px) {
-  .home-hero {
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  }
-
-  .home-hero-art .home-figure-image {
-    max-height: min(76vh, 760px);
-  }
-}
-
-/* ---------- Featured Upland Folk — local soot exhibition environment ------- */
-.home-featured {
-  --bg-canvas: var(--color-soot);
-  --text-main: var(--color-bone);
-  --text-muted: var(--color-dark-muted);
-  --accent-main: var(--color-cadmium-light);
-  --link: var(--color-cadmium-light);
-  --border-soft: var(--color-dark-line);
-  --focus-ring: var(--color-cadmium-light);
-
-  background: var(--color-soot);
-  color: var(--color-bone);
-  /* Hairline boundaries so the "room" reads as distinct even in dark theme. */
-  border-block: var(--line-width) solid var(--color-dark-line);
-}
-
-.home-featured-inner {
-  display: grid;
-  gap: clamp(2rem, 5vw, 3.5rem);
-  padding-block: clamp(3rem, 8vw, 6rem);
-}
-
-.home-featured-intro {
-  display: grid;
-  gap: var(--space-4);
-  justify-items: start;
-  max-width: var(--reading-max);
-}
-
-.home-featured-logo {
-  width: min(100%, 30rem);
-  height: auto;
-}
-
-.home-featured-context {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: clamp(1rem, 2.2vw, 1.15rem);
-  max-width: 62ch;
-}
-
-.home-featured-plate {
-  display: grid;
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-  align-items: center;
-}
-
-.home-featured-supporting {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1rem, 3vw, 2rem);
-  align-items: center;
-}
-
-@media (min-width: 860px) {
-  .home-featured-plate {
-    grid-template-columns: 1.25fr 0.75fr;
-  }
-
-  .home-featured-supporting {
-    grid-template-columns: 1fr;
-    gap: clamp(1.5rem, 3vw, 2.5rem);
-  }
-
-  .home-featured-principal .home-figure-image {
-    width: auto;
-    max-width: 100%;
-    max-height: 70vh;
-    margin-inline: auto;
-  }
-}
-
-/* ---------- Selected works ---------- */
-.home-selected {
-  display: grid;
-  gap: clamp(2rem, 5vw, 3.5rem);
-}
-
-.home-selected-heading,
-.home-archive-heading,
-.home-contact-heading {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
-  letter-spacing: -0.01em;
-}
-
-.home-anchor-band,
-.home-vertical-band {
-  display: grid;
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-}
-
-/* Hover/focus response is scoped to the rectangular selected works: the frame
-   clips a ≤1.5% enlargement invisibly. Transparent hero/featured works are
-   never scaled (their sculptural silhouettes must not be clipped). */
-.home-selected-item .home-figure-frame {
-  overflow: hidden;
-}
-
-.home-selected-item .home-figure-image {
-  transition: transform var(--motion-control) var(--ease-standard);
-}
-
-.home-selected-item:hover .home-figure-image {
-  transform: scale(1.012);
-}
-
-.home-selected-item .home-figure-title {
-  transition: color var(--motion-control) var(--ease-standard);
-}
-
-.home-selected-item:hover .home-figure-title,
-.home-selected-item:focus-visible .home-figure-title {
-  color: var(--link);
-}
-
-@media (min-width: 860px) {
-  .home-anchor-band {
-    grid-template-columns: 1.7fr 1fr;
-    align-items: start;
-  }
-
-  .home-anchor-band .role-anchor {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-  }
-
-  .home-vertical-band {
-    grid-template-columns: repeat(12, 1fr);
-    align-items: end;
-  }
-
-  .home-vertical-band > :nth-child(1) {
-    grid-column: 1 / span 4;
-  }
-
-  /* Offset the middle work upward for the "vertical conversation" stagger. */
-  .home-vertical-band > :nth-child(2) {
-    grid-column: 5 / span 4;
-    margin-bottom: clamp(2rem, 6vw, 4.5rem);
-  }
-
-  .home-vertical-band > :nth-child(3) {
-    grid-column: 9 / span 4;
-  }
-}
-
-/* ---------- Archive index ---------- */
-.home-archive {
-  display: grid;
-  gap: var(--space-5);
-}
-
-.archive-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: var(--line-width) solid var(--border-soft);
-}
-
-.archive-row {
-  border-bottom: var(--line-width) solid var(--border-soft);
-}
-
-.archive-row-link {
-  display: grid;
-  grid-template-columns: auto auto 1fr auto;
-  align-items: baseline;
-  gap: var(--space-4);
-  padding: clamp(1rem, 2.5vw, 1.5rem) var(--space-2);
-  color: var(--text-main);
-  transition:
-    color var(--transition-fast),
-    padding-left var(--transition-fast);
-}
-
-.archive-row-link:hover,
-.archive-row-link:focus-visible {
-  color: var(--link);
-  padding-left: var(--space-4);
-}
-
-.archive-year {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.35rem, 3vw, 1.9rem);
-  min-width: 3.5ch;
-}
-
-.archive-count {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-.archive-story {
-  color: var(--text-muted);
-}
-
-.archive-cue {
-  justify-self: end;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
+.intro-splash-name {
+  font-size: clamp(20px, 3.4vw, 42px);
+  font-weight: 600;
+  color: var(--color-ink);
   text-transform: uppercase;
-  color: var(--accent-main);
+  text-align: center;
+  padding: 0 24px;
+  animation: intro-name 1400ms var(--ease-enter) 200ms both;
 }
 
-@media (max-width: 620px) {
-  .archive-row-link {
-    grid-template-columns: auto 1fr;
-    gap: var(--space-1) var(--space-3);
-  }
+/* Repeat visitors (flag set by the inline pre-hydration script) and
+   reduced-motion users never see the splash — no flash before hydration. */
+html[data-intro-seen] .intro-splash {
+  display: none;
+}
 
-  .archive-story {
-    grid-column: 1 / -1;
-  }
-
-  .archive-cue {
+@media (prefers-reduced-motion: reduce) {
+  .intro-splash {
     display: none;
   }
 }
 
-/* ---------- Closing enquiry ---------- */
-.home-contact {
-  display: grid;
-  gap: var(--space-4);
-  justify-items: start;
-  max-width: var(--reading-max);
-}
-
-.home-contact-copy {
-  margin: 0;
-  max-width: 52ch;
-  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
-  color: var(--text-muted);
-}
-
-.home-contact-actions {
-  margin-top: var(--space-2);
-}
-
-/* ---------- Entrance motion (CSS-only, ≤16px, opacity + transform) -------- */
-@keyframes home-rise {
+/* =========================== Shared motion =============================== */
+@keyframes rise {
   from {
     opacity: 0;
     transform: translateY(16px);
@@ -1269,7 +250,7 @@ a {
   }
 }
 
-@keyframes home-fade {
+@keyframes fade {
   from {
     opacity: 0;
   }
@@ -1278,116 +259,717 @@ a {
   }
 }
 
-.home-hero-text > * {
-  animation: home-rise var(--motion-transition) var(--ease-enter) both;
+/* =============================== Header ================================== */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  padding: 14px var(--gutter);
+  border-bottom: var(--line) solid currentColor;
 }
 
-.home-hero-text > *:nth-child(1) {
-  animation-delay: 0ms;
-}
-.home-hero-text > *:nth-child(2) {
-  animation-delay: 70ms;
-}
-.home-hero-text > *:nth-child(3) {
-  animation-delay: 140ms;
-}
-.home-hero-text > *:nth-child(4) {
-  animation-delay: 210ms;
+.brand {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
-.home-hero-art {
-  animation: home-fade var(--motion-editorial) var(--ease-enter) both;
-  animation-delay: 120ms;
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(14px, 2vw, 28px);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-/* =============================== Footer ================================ */
-/* Full-width surface with a hairline top divider; content aligns to the same
-   capped canvas as the header and page. Editorial, not a filled panel. */
-.site-footer {
-  border-top: var(--line-width) solid var(--border-soft);
-  background: var(--bg-canvas);
+.site-nav a {
+  transition: color var(--hover-fade);
 }
 
-.site-footer-inner {
+.site-nav a:hover,
+.site-nav a.is-active {
+  color: var(--room-accent);
+}
+
+/* Detail-page header variants. */
+.header-back,
+.header-close {
+  color: var(--room-muted);
+  transition: color var(--hover-fade);
+}
+
+.header-back {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.header-close {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.header-back:hover,
+.header-close:hover {
+  color: var(--room-accent);
+}
+
+/* ======================== Sub-bars and caption bars ====================== */
+/* Sub-bar: tabs, section labels. Caption bar: counter | caption | actions. */
+.subbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  padding: 11px var(--gutter);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.subbar.has-rule-below {
+  border-bottom: var(--line) solid currentColor;
+}
+
+.subbar-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.subbar-muted {
+  color: var(--room-muted);
+}
+
+.subbar-link {
+  color: var(--room-accent);
+  transition: color var(--hover-fade);
+}
+
+.subbar-link:hover {
+  color: var(--room-ink);
+}
+
+.caption-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  padding: 11px var(--gutter);
+  border-top: var(--line) solid currentColor;
+  font-size: 12.5px;
+}
+
+.caption-bar.is-detail {
+  padding: 13px var(--gutter) 18px;
+}
+
+.caption-counter {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  min-width: 6ch;
+}
+
+.caption-line {
+  text-align: center;
+  color: var(--room-muted);
+}
+
+.caption-title {
+  color: var(--room-ink);
+  font-style: italic;
+}
+
+.caption-series {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+}
+
+.caption-actions {
+  display: flex;
+  gap: clamp(14px, 2vw, 24px);
+}
+
+.caption-action {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color var(--hover-fade);
+}
+
+.caption-action.is-accent {
+  color: var(--room-accent);
+}
+
+.caption-action.is-accent:hover {
+  color: var(--room-ink);
+}
+
+.caption-action.is-muted {
+  color: var(--room-muted);
+}
+
+.caption-action.is-muted:hover {
+  color: var(--room-accent);
+}
+
+/* ============================ Plate stages =============================== */
+/* Shared full-bleed stage: the artwork is object-fit contained, never
+   cropped; uncovered width shows the room ground. */
+.stage {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 100%;
+  place-items: center;
+}
+
+.stage-plate {
+  position: relative;
+  grid-area: 1 / 1;
   width: 100%;
-  max-width: var(--canvas-max);
-  margin-inline: auto;
-  padding: clamp(2rem, 5vw, 3.5rem) var(--gutter-page);
+  height: 100%;
+  animation: fade 420ms var(--ease-enter) both;
+}
+
+.stage-plate img {
+  object-fit: contain;
+}
+
+/* Dark-room plates carry the prototype's deep shadow. */
+.is-soot .stage-plate.has-soot-shadow img {
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.5);
+}
+
+/* Gallery slideshow stage padding. */
+.stage.is-gallery {
+  padding: clamp(20px, 4vh, 44px) clamp(48px, 8vw, 110px);
+}
+
+/* Detail plate: generous plate padding. */
+.stage.is-detail {
+  padding: clamp(24px, 5vh, 56px) clamp(48px, 10vw, 140px);
+}
+
+/* Invisible prev/next click zones with ‹ › glyphs. */
+.stage-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 33%;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(14px, 2vw, 28px);
+  font-size: 26px;
+  color: var(--room-muted);
+}
+
+.stage-zone.is-prev {
+  left: 0;
+  justify-content: flex-start;
+}
+
+.stage-zone.is-next {
+  right: 0;
+  justify-content: flex-end;
+}
+
+.stage.is-detail .stage-zone {
+  width: 25%;
+}
+
+/* ========================= Home hero carousel ============================ */
+/* The first fold is an exact viewport column: header on top, the carousel
+   fills the rest. Chapters and footer flow below the fold. */
+.viewport-fold {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.fold-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-viewer {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stage {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  text-align: inherit;
+  animation: fade 800ms var(--ease-enter) 120ms both;
+}
+
+.hero-plate {
+  position: relative;
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  animation: fade 800ms var(--ease-enter) both;
+}
+
+.hero-plate img {
+  object-fit: contain;
+}
+
+.home-viewer .subbar.has-rule-below {
+  animation: rise 520ms var(--ease-enter) both;
+}
+
+/* ============================ Chapter menu =============================== */
+.chapters {
+  border-top: var(--line) solid var(--color-ink);
+}
+
+.chapter-row {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-5);
+  gap: 0.5rem clamp(16px, 3vw, 44px);
+  padding: clamp(22px, 3.5vw, 36px) var(--gutter);
+  border-bottom: var(--line) solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-ink);
+  transition: background-color 240ms;
 }
 
-.site-footer-brand {
-  display: grid;
-  gap: var(--space-1);
+.chapter-row:hover {
+  background: var(--color-row-hover);
 }
 
-.site-footer-name {
-  font-family: var(--font-display);
+.chapter-name {
+  font-size: clamp(30px, 4vw, 50px);
   font-weight: 600;
-  font-size: 1.2rem;
-  color: var(--text-main);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
-.site-footer-tag {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.85rem;
+.chapter-desc {
+  font-size: clamp(14px, 1.6vw, 17px);
+  color: var(--color-muted);
+  flex: 1 1 240px;
 }
 
-.site-footer-nav {
+.chapter-count {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chapter-enter {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-cadmium);
+}
+
+/* The Upland Folk row is rendered in soot. */
+.chapter-row.is-soot {
+  background: var(--color-soot);
+  color: var(--color-soot-ink);
+  border-bottom-color: var(--color-soot-rule);
+}
+
+.chapter-row.is-soot:hover {
+  background: var(--color-soot-row-hover);
+}
+
+.chapter-row.is-soot .chapter-desc,
+.chapter-row.is-soot .chapter-count {
+  color: var(--color-soot-muted);
+}
+
+.chapter-row.is-soot .chapter-enter {
+  color: var(--color-soot-accent);
+}
+
+/* ========================= Gallery: chapter tabs ========================= */
+.chapter-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: clamp(14px, 2.5vw, 30px);
 }
 
-.site-footer-nav a {
-  color: var(--text-main);
-  font-size: 0.95rem;
-  padding-bottom: 0.15em;
-  background-image: linear-gradient(var(--accent-main), var(--accent-main));
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 0% var(--line-width);
-  transition:
-    background-size var(--transition-fast),
-    color var(--transition-fast);
+.chapter-tab {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  padding: 2px 0;
+  color: var(--room-muted);
+  border-bottom: var(--line) solid transparent;
+  transition: color var(--hover-fade);
 }
 
-.site-footer-nav a:hover,
-.site-footer-nav a:focus-visible {
-  background-size: 100% var(--line-width);
+.chapter-tab.is-active {
+  color: var(--room-accent);
+  border-bottom-color: var(--room-accent);
 }
 
-.site-footer-legal {
+.mode-toggle {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  padding: 2px 0;
+  color: var(--room-accent);
+  transition: color var(--hover-fade);
+}
+
+.mode-toggle:hover {
+  color: var(--room-ink);
+}
+
+/* ================== Gallery: Upland Folk intro slide ===================== */
+.series-intro {
+  grid-area: 1 / 1;
+  max-width: 640px;
+  max-height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.5vh, 32px);
+  align-items: flex-start;
+  animation: fade 420ms var(--ease-enter) both;
+}
+
+.series-intro-logo {
+  width: min(100%, 480px);
+  max-height: min(28vh, 200px);
+  height: auto;
+  object-fit: contain;
+  align-self: center;
+}
+
+.series-intro-copy {
+  display: grid;
+  gap: 10px;
+  max-width: 58ch;
+}
+
+.series-intro-label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--room-muted);
+}
+
+.series-intro-copy p {
   margin: 0;
-  flex-basis: 100%;
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--room-ink);
 }
 
+.series-intro-copy p + p {
+  color: var(--room-muted);
+}
+
+/* ========================= Gallery: sheet mode =========================== */
+.sheet {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: clamp(20px, 3vw, 40px) var(--gutter);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: clamp(18px, 2.5vw, 30px);
+  align-content: start;
+  animation: fade 360ms both;
+}
+
+.sheet-cell {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  display: grid;
+  gap: 7px;
+  align-content: start;
+}
+
+.sheet-cell img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sheet-caption {
+  font-size: 11.5px;
+  color: var(--room-muted);
+}
+
+.sheet-caption i {
+  font-style: italic;
+  color: var(--room-ink);
+}
+
+/* ============================ Full-height pages ========================== */
+/* Gallery and detail are 100dvh, no scroll. */
+.viewer-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+.viewer-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================= Prose pages =============================== */
+/* Home, About, CV, Contact share the min-height column shell. */
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.page-shell > main {
+  flex: 1;
+}
+
+/* ------------------------------- About ---------------------------------- */
+.about-main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  gap: clamp(28px, 5vw, 72px);
+  padding: clamp(36px, 7vh, 84px) var(--gutter);
+  align-items: start;
+}
+
+.about-figure {
+  margin: 0;
+  animation: rise 520ms var(--ease-enter) both;
+}
+
+.about-figure img {
+  width: min(100%, 420px);
+  height: auto;
+  display: block;
+}
+
+.about-figure figcaption {
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--color-muted);
+}
+
+.about-figure i {
+  font-style: italic;
+  color: var(--color-ink);
+}
+
+.about-statement {
+  display: grid;
+  gap: clamp(18px, 3vh, 28px);
+  max-width: 56ch;
+  animation: rise 520ms var(--ease-enter) 90ms both;
+}
+
+.lead {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.about-secondary {
+  margin: 0;
+  font-size: clamp(15px, 1.6vw, 17px);
+  line-height: 1.7;
+  color: var(--color-body-secondary);
+}
+
+.accent-link {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-cadmium);
+  transition: color var(--hover-fade);
+}
+
+.accent-link:hover {
+  color: var(--color-ink);
+}
+
+/* -------------------------------- CV ------------------------------------ */
+.cv-main {
+  animation: rise 520ms var(--ease-enter) both;
+}
+
+.cv-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2vw, 24px) clamp(16px, 3vw, 44px);
+  padding: clamp(20px, 3.5vh, 32px) var(--gutter);
+  border-bottom: var(--line) solid var(--color-rule-secondary);
+}
+
+.cv-section h2 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  flex: 1 0 160px;
+}
+
+.cv-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  max-width: 78ch;
+  flex: 999 1 min(420px, 100%);
+}
+
+.cv-section li {
+  display: grid;
+  grid-template-columns: minmax(76px, auto) 1fr;
+  gap: 14px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cv-year {
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------ Contact ---------------------------------- */
+.contact-main {
+  display: grid;
+  place-items: center;
+  padding: clamp(36px, 8vh, 96px) var(--gutter);
+}
+
+.contact-block {
+  display: grid;
+  gap: clamp(18px, 3vh, 28px);
+  max-width: 58ch;
+  text-align: center;
+  justify-items: center;
+  animation: rise 520ms var(--ease-enter) both;
+}
+
+.contact-email {
+  font-size: clamp(18px, 2.6vw, 30px);
+  letter-spacing: 0.02em;
+  color: var(--color-cadmium);
+  border-bottom: var(--line) solid var(--color-cadmium);
+  padding-bottom: 2px;
+  transition:
+    color var(--hover-fade),
+    border-color var(--hover-fade);
+}
+
+.contact-email:hover {
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+.contact-meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+/* =============================== Footer ================================== */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 14px var(--gutter) 22px;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.site-footer.has-rule-above {
+  border-top: var(--line) solid var(--color-ink);
+}
+
+/* Home footer sits below the chapter rows (which carry their own rules). */
+.site-footer.is-home {
+  padding: 18px var(--gutter) 26px;
+}
+
+.site-footer-copy {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.site-footer-enquiries {
+  color: var(--color-cadmium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color var(--hover-fade);
+}
+
+.site-footer-enquiries:hover {
+  color: var(--color-ink);
+}
+
+/* ============================== Not found ================================ */
+.notfound-main {
+  display: grid;
+  place-items: center;
+  padding: clamp(36px, 8vh, 96px) var(--gutter);
+}
+
+.notfound-block {
+  display: grid;
+  gap: clamp(18px, 3vh, 28px);
+  max-width: 58ch;
+  text-align: center;
+  justify-items: center;
+}
+
+/* =========================== Reduced motion ============================== */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-}
-
-/* Homepage reduced-motion: remove entrance animations entirely (so content is
-   immediately visible, with no fill-state flash during animation-delay) and
-   disable the hover enlargement. Static focus/colour feedback is preserved. */
-@media (prefers-reduced-motion: reduce) {
-  .home-hero-text > *,
-  .home-hero-art {
-    animation: none;
-  }
-
-  .home-selected-item:hover .home-figure-image {
-    transform: none;
   }
 }

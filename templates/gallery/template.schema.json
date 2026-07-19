@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Artflow gallery template calibration",
+  "type": "object",
+  "required": ["id", "image", "version", "wall_plane", "floor_plane"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "image": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "wall_plane": {
+      "type": ["array", "null"],
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}}
+    },
+    "floor_plane": {
+      "type": ["array", "null"],
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}}
+    },
+    "pixels_per_metre_at_reference": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "notes": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

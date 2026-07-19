@@ -1,7 +1,7 @@
 /**
- * Single source of truth for the enquiry destination and mailto link. Both the
- * `EnquiryButton` and the global footer resolve the address here so the
- * hard-coded fallback lives in exactly one place.
+ * Single source of truth for the enquiry destination and mailto link. Every
+ * enquiry surface (caption bars, footer, contact page) resolves the address
+ * here so the hard-coded fallback lives in exactly one place.
  *
  * `NEXT_PUBLIC_ENQUIRY_EMAIL` should be set per environment (Netlify). The
  * fallback is only used when the variable is unset. See the Phase 0 risk

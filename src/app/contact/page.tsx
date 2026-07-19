@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
-import { EnquiryButton } from "@/components/enquiry-button";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { buildEnquiryHref, getEnquiryEmail } from "@/lib/enquiry";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -10,21 +12,32 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  return (
-    <section className="page prose-page">
-      <header className="page-header">
-        <p className="eyebrow">Contact</p>
-        <h1 className="headline">Studio Enquiries</h1>
-      </header>
+  const email = getEnquiryEmail();
 
-      <div className="contact-card">
-        <p>
-          For collection, exhibition, and commission enquiries, send a message with the artwork
-          title and your location.
-        </p>
-        <EnquiryButton />
-        <p className="meta">Enquiries go directly to the artist and are usually answered within a few days.</p>
+  return (
+    <div className="page-shell">
+      <SiteHeader />
+      <div className="subbar has-rule-below">
+        <h1 className="subbar-label">Contact</h1>
+        <span className="subbar-muted">Studio Enquiries</span>
       </div>
-    </section>
+
+      <main id="main-content" className="contact-main">
+        <div className="contact-block">
+          <p className="lead">
+            For collection, exhibition, and commission enquiries, send a message with the
+            artwork title and your location.
+          </p>
+          <a className="contact-email" href={buildEnquiryHref()}>
+            {email}
+          </a>
+          <p className="contact-meta">
+            Enquiries go directly to the artist and are usually answered within a few days.
+          </p>
+        </div>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }

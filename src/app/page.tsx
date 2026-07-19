@@ -1,32 +1,53 @@
-import { ArchiveIndex } from "@/components/home/archive-index";
-import { FeaturedSeries } from "@/components/home/featured-series";
-import { HomeContact } from "@/components/home/home-contact";
-import { HomeHero } from "@/components/home/home-hero";
-import { HomeIntroduction } from "@/components/home/home-introduction";
-import { SelectedWorkGrid } from "@/components/home/selected-work-grid";
+import Link from "next/link";
+import clsx from "clsx";
+
+import { HomeCarousel } from "@/components/home-carousel";
+import { IntroSplash } from "@/components/intro-splash";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { artworksByYearDescending } from "@/content/artworks";
+
+const UPLAND_FOLK_YEAR = 2022;
 
 /**
- * Homepage — the opening pages of an artist monograph followed by entry into a
- * small digital exhibition:
- *   1. Hero — the artist and a principal work.
- *   2. Introduction — the character of the practice.
- *   3. Featured Upland Folk — a local soot exhibition preview.
- *   4. Selected works — a curated asymmetrical reading of the archive.
- *   5. Archive index — a route into the complete archive.
- *   6. Closing enquiry invitation.
- *
- * All curation lives in `content/homepage.ts`; this file only composes sections.
- * Kept as a Server Component (no client-side state required).
+ * V2 homepage:
+ *   1. Intro splash (once per session).
+ *   2. First fold — header + full-bleed randomized hero carousel.
+ *   3. Chapter menu — one full-width row per series (Upland Folk in soot).
+ *   4. Footer.
  */
 export default function HomePage() {
   return (
-    <div className="home">
-      <HomeHero />
-      <HomeIntroduction />
-      <FeaturedSeries />
-      <SelectedWorkGrid />
-      <ArchiveIndex />
-      <HomeContact />
-    </div>
+    <>
+      <IntroSplash />
+      <div className="viewport-fold">
+        <SiteHeader />
+        <main id="main-content" className="fold-main">
+          <h1 className="sr-only">Peadar Jolliffe-Byrne — selected works 2019–2022</h1>
+          <HomeCarousel />
+        </main>
+      </div>
+
+      <section className="chapters" aria-label="Series chapters">
+        {artworksByYearDescending.map((collection) => (
+          <Link
+            key={collection.year}
+            href={`/gallery?y=${collection.year}`}
+            className={clsx("chapter-row", {
+              "is-soot": collection.year === UPLAND_FOLK_YEAR,
+            })}
+          >
+            <span className="chapter-name">{collection.name}</span>
+            <span className="chapter-desc">{collection.description}</span>
+            <span className="chapter-count">
+              {collection.year} · {collection.works.length} works
+            </span>
+            <span className="chapter-enter">Enter →</span>
+          </Link>
+        ))}
+      </section>
+
+      <SiteFooter variant="home" />
+    </>
   );
 }

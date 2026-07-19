@@ -20,6 +20,10 @@ export const artworkSchema = z.object({
 
 export const artworkCollectionSchema = z.object({
   year: z.number().int().min(1900).max(2200),
+  /** Series name — navigation is series-name-first, year secondary. */
+  name: z.string().min(1),
+  /** One-line chapter description shown in the homepage chapter menu. */
+  description: z.string().min(1),
   works: z.array(artworkSchema),
 });
 

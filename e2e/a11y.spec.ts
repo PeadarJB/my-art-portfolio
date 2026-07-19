@@ -1,6 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { test, expect, type Page } from "@playwright/test";
 
+/**
+ * WCAG 2.1 A/AA axe audits across every screen of the V2 redesign, including
+ * both the white gallery and the Upland Folk soot room.
+ */
+
 async function auditViolations(page: Page) {
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
@@ -14,21 +19,37 @@ async function auditViolations(page: Page) {
   }));
 }
 
-test.describe("homepage accessibility (axe)", () => {
-  test("no violations in the paper (light) theme", async ({ page }) => {
-    await page.goto("/");
-    expect(await auditViolations(page)).toEqual([]);
-  });
-
-  test("no violations in the soot (dark) theme", async ({ page }) => {
-    await page.addInitScript(() => {
-      localStorage.setItem(
-        "portfolio-ui",
-        JSON.stringify({ state: { theme: "dark" }, version: 0 }),
-      );
-    });
-    await page.goto("/");
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-    expect(await auditViolations(page)).toEqual([]);
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    sessionStorage.setItem("pjb-intro-seen", "1");
   });
 });
+
+const screens: Array<{ name: string; path: string; ready?: string }> = [
+  { name: "homepage", path: "/", ready: ".chapter-row" },
+  { name: "gallery — Upland Folk soot room", path: "/gallery", ready: ".series-intro" },
+  { name: "gallery — white room", path: "/gallery?y=2021", ready: ".caption-bar" },
+  {
+    name: "artwork detail — soot room",
+    path: "/gallery/2022/2022-dawn",
+    ready: ".caption-bar",
+  },
+  {
+    name: "artwork detail — white room",
+    path: "/gallery/2019/2019-clouds",
+    ready: ".caption-bar",
+  },
+  { name: "about", path: "/about" },
+  { name: "cv", path: "/cv" },
+  { name: "contact", path: "/contact" },
+];
+
+for (const screen of screens) {
+  test(`no violations: ${screen.name}`, async ({ page }) => {
+    await page.goto(screen.path);
+    if (screen.ready) {
+      await page.locator(screen.ready).first().waitFor();
+    }
+    expect(await auditViolations(page)).toEqual([]);
+  });
+}

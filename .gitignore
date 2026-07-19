@@ -49,3 +49,20 @@ pnpm-debug.log*
 
 # typescript
 *.tsbuildinfo
+
+# artflow runtime state and generated artwork (code/config remain tracked)
+/.venv/
+__pycache__/
+*.py[cod]
+/.pytest_cache/
+/manifest.sqlite
+/manifest.sqlite-shm
+/manifest.sqlite-wal
+/working/*
+!/working/.gitkeep
+/approved/*
+!/approved/.gitkeep
+/templates/gallery/*
+!/templates/gallery/README.md
+!/templates/gallery/template.schema.json
+.env.artflow

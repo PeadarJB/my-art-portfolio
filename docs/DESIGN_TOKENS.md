@@ -1,37 +1,41 @@
 # Design Tokens
 
 ## Token Layers
-1. Primitive tokens: raw color, spacing, radius, shadow, and motion values.
-2. Semantic tokens: role-based aliases (`--text-main`, `--bg-canvas`, `--bg-card`,
-   `--accent-main`, `--border-soft`, `--link`, `--focus-ring`) resolved per theme.
-3. Component tokens: scoped overrides where needed (e.g. the lightbox redefines
-   the semantic tokens locally to render an atmospheric soot environment).
+1. Primitive tokens: the fixed V2 palette from the gallery-redesign handoff
+   (`--color-*` in `src/app/globals.css`).
+2. Room tokens: role-based aliases (`--room-bg`, `--room-ink`, `--room-muted`,
+   `--room-accent`) resolved per room. `.room.is-soot` swaps a page (or the
+   home hero stage) into the Upland Folk dark room with a 600ms crossfade;
+   components read room tokens and never branch on palette themselves.
 
 ## Current Token Source
 - `src/app/globals.css`
 
-## Design Direction (approved — Phase 1A/1B)
-- **The Animated Monograph** — editorial, spacious, artwork-led.
-- Fonts: **Newsreader** (display/editorial) + **Manrope** (interface/body),
-  via `next/font/google` with `display: swap`.
-- Light environment: **warm paper** (`--color-paper #f2eee6`) with ink text.
-- Dark environment: **soot & bone** (`--color-soot #171412` / `--color-bone`).
-- Principal accent: **cadmium** (`--color-cadmium #b74034`); `--color-cadmium-light`
-  for legible links/accents on soot. Ultramarine/mineral are reserved,
-  series-aware secondaries; ochre is for large graphic marks only (never body
-  text on paper).
-- Shape: square artwork edges (`--radius-image: 0`); minimal control/overlay
-  radii. Elevation: content is flat; shadow is reserved for overlays.
-- Motion: low-to-moderate, CSS-first (`--motion-*`, `--ease-*`).
+## Design Direction (approved — V2 Gallery Redesign)
+- Gallery-grade language: **white ground** (`#ffffff`) with near-black ink
+  (`#131313`), hairline rules (1px, ink; secondary rules `#dcdcdc`), and
+  **cadmium** (`#b74034`) as the only accent.
+- The **soot room** (`#171412` / bone `#eee8de` / muted `#bdb4a8` / lifted
+  accent `#d98a80` / rules `#3a3430`) is reserved exclusively for the Upland
+  Folk (2022) series — the gallery chapter, its detail plates, its chapter
+  row, and hero slides showing 2022 works.
+- Type: a **single neutral grotesque** (`'Helvetica Neue', Helvetica, Arial,
+  sans-serif`), weights 400/600 only. No serif anywhere. Uppercase
+  letter-spaced bars (12px/0.08em), tabular zero-padded counters, italic
+  artwork titles in caption lines.
+- Structure: page gutter `clamp(16px, 2.5vw, 32px)`; no border radius, no
+  cards; shadows only on soot-room plates.
+- Motion: reveals ≤24px translate on `cubic-bezier(0.22, 1, 0.36, 1)`; plate
+  crossfades 420–800ms; room crossfade 600ms; hover colour 160ms.
+- Custom circle cursor (26px, difference-blended) on fine pointers only.
 
 ## Theme Model
-- `data-theme="light"` and `data-theme="dark"` on `<html>`.
-- Theme state persisted via Zustand store (`lib/store/ui-store.ts`), key
-  `portfolio-ui`, applied before paint by the inline no-flash script.
+- No user-facing theme toggle. The white gallery is the only theme; soot is a
+  contextual room, not a preference. The former Zustand-persisted
+  `data-theme` model was retired with the V2 redesign.
 
 ## Rules
 - Add/extend tokens before adding one-off hardcoded values.
-- Prefer semantic tokens in component styles; keep legacy aliases pointing at the
-  current scale rather than creating a competing system.
-- Maintain WCAG-AA contrast and readability across both themes.
-- Let the artwork supply most of the page colour; use one accent at a time.
+- Prefer room tokens in component styles so soot support comes for free.
+- Maintain WCAG-AA contrast in both rooms (all V2 pairings pass AA).
+- Let the artwork supply most of the page colour; cadmium is the only accent.
