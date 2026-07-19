@@ -148,10 +148,17 @@ test.describe("artwork detail", () => {
 
   test("arrow keys navigate to the neighbouring work routes", async ({ page }) => {
     await page.goto("/gallery/2022/2022-dawn");
+    // Sync on the counter before each keypress so the new route's key
+    // listeners are attached (guards against pressing during a transition).
+    await expect(page.locator(".caption-counter")).toHaveText("02 / 08");
+
     await page.keyboard.press("ArrowRight");
     await page.waitForURL("**/gallery/2022/2022-escape-from-the-cave");
+    await expect(page.locator(".caption-counter")).toHaveText("03 / 08");
+
     await page.keyboard.press("ArrowLeft");
     await page.waitForURL("**/gallery/2022/2022-dawn");
+    await expect(page.locator(".caption-counter")).toHaveText("02 / 08");
   });
 
   test("white room for non-Upland-Folk years", async ({ page }) => {

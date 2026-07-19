@@ -177,7 +177,9 @@ export function GalleryView({ initialYear }: GalleryViewProps) {
 
             <div className="caption-bar">
               <span className="caption-counter">
-                {isIntro ? "Series" : `${pad(workIndex + 1)} / ${chapter.works.length}`}
+                {isIntro
+                  ? "Series"
+                  : `${pad(workIndex + 1)} / ${pad(chapter.works.length)}`}
               </span>
               <span className="caption-line">
                 <i className="caption-title">{work ? work.title : chapter.name}</i>,{" "}

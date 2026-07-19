@@ -96,7 +96,7 @@ export function DetailView({ work, previous, next, index, total }: DetailViewPro
 
         <div className="caption-bar is-detail">
           <span className="caption-counter">
-            {pad(index + 1)} / {total}
+            {pad(index + 1)} / {pad(total)}
           </span>
           <span className="caption-line">
             <i className="caption-title">{work.title}</i>, {work.year} — {work.medium},{" "}

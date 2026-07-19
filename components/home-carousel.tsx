@@ -95,7 +95,7 @@ export function HomeCarousel() {
 
       <div className="caption-bar">
         <span className="caption-counter">
-          {entry ? `${pad(index + 1)} / ${totalWorkCount}` : ""}
+          {entry ? `${pad(index + 1)} / ${pad(totalWorkCount)}` : ""}
         </span>
         <span className="caption-line" aria-live="polite">
           {entry ? (
